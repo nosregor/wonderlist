@@ -11,12 +11,62 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/lists', (_req, res) => {
-  res.send('GET HTTP method on list resource');
+const users: any = {
+  1: {
+    id: '1',
+    username: 'Werdna',
+  },
+  2: {
+    id: '2',
+    username: 'Dave',
+  },
+};
+
+const lists: any = {
+  1: {
+    id: '1',
+    name: 'ShoppingList',
+    userId: '1',
+  },
+  2: {
+    id: '2',
+    name: 'Todo',
+    userId: '1',
+  },
+};
+
+// let tasks: any = {
+//   1: {
+//     id: '1',
+//     name: 'Banana',
+//     listId: '1',
+//   },
+//   2: {
+//     id: '2',
+//     name: 'Apple',
+//     listId: '1',
+//   },
+//   3: {
+//     id: '2',
+//     name: 'Pear',
+//     listId: '1',
+//   },
+// };
+
+app.get('/users', (_req, res) => {
+  return res.send(Object.values(users));
 });
 
-app.post('/lists', (_req, res) => {
-  res.send('POST HTTP method on list resource');
+app.get('/users/:userId', (req, res) => {
+  return res.send(users[req.params.userId]);
+});
+
+app.get('/lists', (_req, res) => {
+  res.send(Object.values(lists));
+});
+
+app.post('/lists', (req, res) => {
+  res.send(lists[req.params.listId]);
 });
 
 app.put('/lists/:listId', (req, res) => {
