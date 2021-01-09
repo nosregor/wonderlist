@@ -1,10 +1,13 @@
 module.exports = {
   env: {
-    browser: true,
+    node: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     'airbnb-base',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
   ],
@@ -14,5 +17,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
-  rules: { 'no-console': 1 },
+  rules: {
+    'no-console': 1,
+    'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
+  },
 };

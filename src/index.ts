@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
+import models from './models';
 
 const port = process.env.PORT || 3000;
-
 const app = express();
 
 app.use(cors());
@@ -11,62 +11,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const users: any = {
-  1: {
-    id: '1',
-    username: 'Werdna',
-  },
-  2: {
-    id: '2',
-    username: 'Dave',
-  },
-};
-
-const lists: any = {
-  1: {
-    id: '1',
-    name: 'ShoppingList',
-    userId: '1',
-  },
-  2: {
-    id: '2',
-    name: 'Todo',
-    userId: '1',
-  },
-};
-
-// let tasks: any = {
-//   1: {
-//     id: '1',
-//     name: 'Banana',
-//     listId: '1',
-//   },
-//   2: {
-//     id: '2',
-//     name: 'Apple',
-//     listId: '1',
-//   },
-//   3: {
-//     id: '2',
-//     name: 'Pear',
-//     listId: '1',
-//   },
-// };
-
 app.get('/users', (_req, res) => {
-  return res.send(Object.values(users));
+  return res.send(Object.values(models.users));
 });
 
 app.get('/users/:userId', (req, res) => {
-  return res.send(users[req.params.userId]);
+  return res.send(models.users[req.params.userId]);
 });
 
 app.get('/lists', (_req, res) => {
-  res.send(Object.values(lists));
+  res.send(Object.values(models.lists));
 });
 
 app.post('/lists', (req, res) => {
-  res.send(lists[req.params.listId]);
+  res.send(models.lists[req.params.listId]);
 });
 
 app.put('/lists/:listId', (req, res) => {
