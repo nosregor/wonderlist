@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import express, { NextFunction } from 'express';
 import logger from 'morgan';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import connectDB from './database';
@@ -21,8 +22,9 @@ connectDB();
 app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(cookieParser('12345-67890-09876-54321'));
 
 // @ts-ignore: Unreachable code error
 app.use(auth);
