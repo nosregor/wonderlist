@@ -1,13 +1,13 @@
 import { NextFunction } from 'express';
 
 export default function auth(req: any, res: any, next: NextFunction) {
-  console.log(req.signedCookies);
+  console.log(req.session);
   console.log(req.headers.authorization);
 
-  if (!req.signedCookies.user) {
+  if (!req.session.user) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      var err = new Error('You are not authenticated!');
+      const err = new Error('You are not authenticated!');
       res.setHeader('WWW-Authenticate', 'Basic');
       // @ts-ignore: Unreachable code error
       err.status = 401;
@@ -22,7 +22,7 @@ export default function auth(req: any, res: any, next: NextFunction) {
     const user = auth[0];
     const pass = auth[1];
     if (user === 'admin' && pass === 'password') {
-      res.cookie('user', 'admin', { signed: true });
+      req.session.user = 'admin';
       next(); // authorized
     } else {
       const err = new Error('You are not authenticated!');
@@ -31,10 +31,11 @@ export default function auth(req: any, res: any, next: NextFunction) {
       err.status = 401;
       next(err);
     }
-  } else if (req.signedCookies.user === 'admin') {
+  } else if (req.session.user === 'admin') {
+    console.log('req.session: ', req.session);
     next();
   } else {
-    var err = new Error('You are not authenticated!');
+    const err = new Error('You are not authenticated!');
     // @ts-ignore: Unreachable code error
     err.status = 401;
     next(err);

@@ -4,7 +4,9 @@ import express, { NextFunction } from 'express';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import session from 'express-session';
+import sessionFileStore from 'session-file-store';
+const FileStore = sessionFileStore(session);
 import connectDB from './database';
 import routes from './routes';
 import auth from './middlewares/auth';
@@ -24,7 +26,15 @@ connectDB();
 // Third-Party Middleware
 app.use(cors());
 app.use(logger('dev'));
-app.use(cookieParser('12345-67890-09876-54321'));
+app.use(
+  session({
+    name: 'session-id',
+    secret: '12345-67890-09876-54321',
+    saveUninitialized: false,
+    resave: false,
+    store: new FileStore(),
+  }),
+);
 
 // Built-In Middleware
 app.set('port', process.env.PORT || 3000);
