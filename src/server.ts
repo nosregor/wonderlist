@@ -23,8 +23,8 @@ connectDB();
 
 // Third-Party Middleware
 app.use(cors());
-app.use(cookieParser('12345-67890-09876-54321'));
 app.use(logger('dev'));
+app.use(cookieParser('12345-67890-09876-54321'));
 
 // Built-In Middleware
 app.set('port', process.env.PORT || 3000);
