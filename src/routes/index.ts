@@ -1,7 +1,9 @@
-import user from './user';
+import docs from './docs';
 import list from './list';
+import user from './user';
 
 export default {
-  user,
+  docs,
   list,
+  user,
 };

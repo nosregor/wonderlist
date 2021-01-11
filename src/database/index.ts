@@ -1,7 +1,7 @@
 import { connect, ConnectionOptions } from 'mongoose';
 
 const connectDB = async () => {
-  // const mongoURI:string  = process.env.DATABASE_URL;
+  // const mongoURI:string  = process.env.MONGO_URI;
   const mongoURI = 'mongodb://localhost:27017/wonderlist-database';
   const connectOptions: ConnectionOptions = {
     useCreateIndex: true,
@@ -23,12 +23,5 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
-// const disconnect = () => {
-//   if (!database) {
-//     return;
-//   }
-//   Mongoose.disconnect();
-// };
 
 export default connectDB;
