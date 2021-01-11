@@ -5,7 +5,6 @@ module.exports = {
     jest: true,
   },
   extends: [
-    'airbnb-base',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/typescript',
     'prettier/@typescript-eslint',
@@ -16,9 +15,9 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'prettier', 'jest'],
   rules: {
-    'no-console': 1,
-    'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
+    'no-console': 0,
+    'prefer-template': 0,
   },
 };
