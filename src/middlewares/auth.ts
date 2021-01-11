@@ -10,13 +10,12 @@ export default function auth(req: any, res: any, next: NextFunction) {
       var err = new Error('You are not authenticated!');
       res.setHeader('WWW-Authenticate', 'Basic');
       // @ts-ignore: Unreachable code error
-
       err.status = 401;
       next(err);
       return;
     }
-    // @ts-ignore: Unreachable code error
 
+    // @ts-ignore: Unreachable code error
     const auth = new Buffer.from(authHeader.split(' ')[1], 'base64')
       .toString()
       .split(':');
@@ -37,7 +36,6 @@ export default function auth(req: any, res: any, next: NextFunction) {
   } else {
     var err = new Error('You are not authenticated!');
     // @ts-ignore: Unreachable code error
-
     err.status = 401;
     next(err);
   }

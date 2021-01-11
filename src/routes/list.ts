@@ -5,71 +5,49 @@ import { List } from '../models';
 const router = Router();
 
 router
-  .get('/', async (req, res) => {
-    const list = await List.find({});
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    return res.send(list);
+  .get('/', async (req, res, next) => {
+    const lists = await List.find().catch((error: any) =>
+      next(new BadRequestError(error)),
+    );
+
+    return res.send(lists);
   })
   .post('/', async (req, res, next) => {
-    const { title, description } = req.body;
     const list = await List.create({
-      title,
-      description,
+      title: req.body.title,
+      description: req.body.description,
     }).catch((error) => next(BadRequestError.from(error)));
 
     return res.send(list);
-  })
-  .put('/', async (req, res) => {
-    res.statusCode = 403;
-    res.end('PUT operation not supported on /list');
-  })
-  .delete('/', async (req, res) => {
-    const list = await List.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-    if (list) {
-      await list.remove();
-    }
-    return res.send({ message: 'List deleted' });
   });
 
 router
-  .get('/:listId', async (req, res) => {
-    const list = await List.findById({
-      id: req.params.id,
-    });
-    res.send(list);
+  .get('/:listId', async (req, res, next) => {
+    const list = await List.findById(
+      req.params.listId,
+    ).catch((error: any) => next(new BadRequestError(error)));
+
+    return res.send(list);
   })
-  .post('/:listId', async (req, res) => {
-    res.statusCode = 403;
-    res.end(
-      `POST operation not supported on /lists/${req.params.listId}`,
-    );
+  .put('/:listId', async (req, res, next) => {
+    const list = await List.findByIdAndUpdate(
+      req.params.listId,
+      {
+        $set: req.body,
+      },
+      { new: true },
+    ).catch((error: any) => next(new BadRequestError(error)));
   })
-  .put('/:listId', async (req, res) => {
-    try {
-      const list = await List.findByIdAndUpdate(
-        req.params.listId,
-        {
-          $set: req.body,
-        },
-        { new: true },
-      );
-      res.send(list);
-    } catch (error) {
-      res.status(404).send({ message: 'List not found' });
-    }
-  })
-  .delete('/listId', async (req, res) => {
-    const list = await List.findById(req.params.listId);
+  .delete('/:listId', async (req, res, next) => {
+    const list = await List.findById(
+      req.params.listId,
+    ).catch((error: any) => next(new BadRequestError(error)));
+
     if (list) {
       await list.remove();
-
-      return res.send(list);
     }
+
+    return res.send(list);
   });
 
 export default router;
