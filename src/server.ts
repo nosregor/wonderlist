@@ -6,6 +6,7 @@ import cors from 'cors';
 
 import connectDB from './database';
 import routes from './routes';
+import auth from './middlewares/auth';
 
 export interface IGetUserAuthInfoRequest extends Request {
   user: string; // or any other type
@@ -22,6 +23,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// @ts-ignore: Unreachable code error
+app.use(auth);
 
 // Express routes
 app.get('/', (_req, res) => {
