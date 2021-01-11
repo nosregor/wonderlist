@@ -8,6 +8,7 @@ import cors from 'cors';
 import connectDB from './database';
 import routes from './routes';
 import auth from './middlewares/auth';
+import { BadRequestError } from './middlewares/error-handler';
 
 export interface IGetUserAuthInfoRequest extends Request {
   user: string; // or any other type
@@ -26,7 +27,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser('12345-67890-09876-54321'));
 
-// @ts-ignore: Unreachable code error
 app.use(auth);
 
 // Express routes
@@ -39,7 +39,26 @@ app.use('/users', routes.user);
 app.use('/docs', routes.docs);
 
 app.get('*', function (req, res, next) {
-  res.status(301).redirect('/not-found');
+  const error = new BadRequestError(
+    `${req.ip} tried to access ${req.originalUrl}`,
+  );
+
+  error.statusCode = 301;
+
+  next(error);
+});
+
+// * Application-Level Middleware * //
+app.use((error: any, req: any, res: any, next: NextFunction) => {
+  if (!error.statusCode) error.statusCode = 500;
+
+  if (error.statusCode === 301) {
+    return res.status(301).redirect('/not-found');
+  }
+
+  return res
+    .status(error.statusCode)
+    .json({ error: error.toString() });
 });
 
 const port = app.get('port');

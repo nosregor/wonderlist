@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { BadRequestError } from '../middlewares/error-handler';
 import { List } from '../models';
 
 const router = Router();
@@ -11,15 +12,11 @@ router
     return res.send(list);
   })
   .post('/', async (req, res, next) => {
-    let list;
-
-    try {
-      const { title, description } = req.body;
-      await List.create({ title, description });
-    } catch (error) {
-      // validation errors
-      return res.status(400).json({ error: error.toString() });
-    }
+    const { title, description } = req.body;
+    const list = await List.create({
+      title,
+      description,
+    }).catch((error) => next(BadRequestError.from(error)));
 
     return res.send(list);
   })
