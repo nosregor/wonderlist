@@ -10,9 +10,18 @@ router
     res.setHeader('Content-Type', 'application/json');
     return res.send(list);
   })
-  .post('/', async (req, res) => {
-    const list = await List.create(req.body);
-    res.send(list);
+  .post('/', async (req, res, next) => {
+    let list;
+
+    try {
+      const { title, description } = req.body;
+      await List.create({ title, description });
+    } catch (error) {
+      // validation errors
+      return res.status(400).json({ error: error.toString() });
+    }
+
+    return res.send(list);
   })
   .put('/', async (req, res) => {
     res.statusCode = 403;
@@ -26,12 +35,8 @@ router
     });
     if (list) {
       await list.remove();
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
-      res.send({ message: 'List deleted' });
-    } else {
-      res.status(404).send({ message: 'List not found' });
     }
+    return res.send({ message: 'List deleted' });
   });
 
 router
@@ -39,13 +44,7 @@ router
     const list = await List.findById({
       id: req.params.id,
     });
-    if (list) {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
-      res.send(list);
-    } else {
-      res.status(404).send({ message: 'List not found' });
-    }
+    res.send(list);
   })
   .post('/:listId', async (req, res) => {
     res.statusCode = 403;
@@ -62,8 +61,6 @@ router
         },
         { new: true },
       );
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
       res.send(list);
     } catch (error) {
       res.status(404).send({ message: 'List not found' });
@@ -73,9 +70,8 @@ router
     const list = await List.findById(req.params.listId);
     if (list) {
       await list.remove();
-      res.send({ message: 'List deleted' });
-    } else {
-      res.status(404).send({ message: 'List not found' });
+
+      return res.send(list);
     }
   });
 

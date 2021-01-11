@@ -20,7 +20,8 @@ router.get('/', async (_req: Request, res: Response) => {
 router.post(
   '/signup',
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.params;
+    console.log(req.body);
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
@@ -30,9 +31,7 @@ router.post(
     }
 
     const newUser = await User.create({ email, password });
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.send({ status: 'Registration Successful!', newUser });
+    return res.send('Registration Successful!');
   },
 );
 

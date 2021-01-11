@@ -6,13 +6,16 @@
 
 ### Features
 
-- Minimal
 - TypeScript v4
 - Testing with Jest
 - Linting with Eslint and Prettier
 - Pre-commit hooks with Husky
 - VS Code debugger scripts
 - Local development with Nodemon
+
+The main purpose of this repository is to show a good end-to-end project setup and workflow for writing a Node.js Express Mongoose code in TypeScript complete with middleware, models, routes and types.
+
+This project comes with a complete REST API to handle Authentication and CRUD features on Users as well as handle Lists and their corresponding Tasks.
 
 ### Scripts
 

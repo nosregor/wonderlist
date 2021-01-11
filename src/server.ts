@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import 'dotenv/config';
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 
 import connectDB from './database';
@@ -22,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Express routes
+app.get('*', function (req, res, next) {
+  res.status(301).redirect('/not-found');
+});
 app.get('/', (_req, res) => res.send('API Running'));
 app.use('/users', routes.user);
 app.use('/lists', routes.list);
