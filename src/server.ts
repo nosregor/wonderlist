@@ -19,17 +19,22 @@ const app = express();
 // Connect to MONGODB
 connectDB();
 
-// Express configuration
-app.set('port', process.env.PORT || 3000);
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// * Application-Level Middleware * //
+
+// Third-Party Middleware
 app.use(cors());
 app.use(cookieParser('12345-67890-09876-54321'));
+app.use(logger('dev'));
 
+// Built-In Middleware
+app.set('port', process.env.PORT || 3000);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Custome Middleware
 app.use(auth);
 
-// Express routes
+// * Routes * //
 app.get('/', (_req, res) => {
   res.send({ message: 'Service is healthy', date: new Date() });
 });
@@ -49,6 +54,7 @@ app.get('*', function (req, res, next) {
 });
 
 // * Application-Level Middleware * //
+
 app.use((error: any, req: any, res: any, next: NextFunction) => {
   if (!error.statusCode) error.statusCode = 500;
 
