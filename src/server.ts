@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import 'dotenv/config';
 import express, { NextFunction } from 'express';
+import logger from 'morgan';
 import cors from 'cors';
 
 import connectDB from './database';
@@ -17,6 +18,7 @@ connectDB();
 
 // Express configuration
 app.set('port', process.env.PORT || 3000);
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
