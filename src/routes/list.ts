@@ -1,17 +1,24 @@
 import { Router } from 'express';
 import { BadRequestError } from '../middlewares/error-handler';
 import { List } from '../models';
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
 router
-  .get('/', async (req, res, next) => {
-    const lists = await List.find().catch((error: any) =>
-      next(new BadRequestError(error)),
-    );
+  .get(
+    '/',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res, next) => {
+      console.log(req.headers);
+      const lists = await List.find().catch((error: any) =>
+        next(new BadRequestError(error)),
+      );
 
-    return res.send(lists);
-  })
+      return res.send(lists);
+    },
+  )
   .post('/', async (req, res, next) => {
     const list = await List.create({
       title: req.body.title,

@@ -23,14 +23,16 @@
   },
   "homepage": "https://github.com/nosregor/wonderlist#readme",
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.9",
     "@types/express-session": "^1.17.3",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.10.3",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.20",
-    "@types/session-file-store": "^1.2.1",
+    "@types/passport-jwt": "^3.0.3",
     "@types/swagger-ui-express": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -45,14 +47,22 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
+    "@types/passport": "^1.0.5",
+    "@types/passport-local-mongoose": "^4.0.13",
+    "authenticate": "^0.1.5",
+    "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.11",
     "morgan": "^1.10.0",
-    "session-file-store": "^1.5.0",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
   }
 }

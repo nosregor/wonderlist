@@ -1,5 +1,5 @@
-import { NextFunction } from 'express';
 import { Document, Model, model, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export interface IUser extends Document {
   email: string;
@@ -9,6 +9,14 @@ export interface IUser extends Document {
 
 const userSchema = new Schema(
   {
+    firstname: {
+      type: String,
+      default: '',
+    },
+    lastname: {
+      type: String,
+      default: '',
+    },
     email: {
       type: String,
       required: true,
@@ -26,18 +34,21 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-userSchema.statics.findByLogin = async function (login) {
-  let user = await this.findOne({
-    email: login,
-  });
+userSchema.pre<IUser>('save', async function (next) {
+  const user = this;
+  const hash = await bcrypt.hash(this.password, 10);
 
-  if (!user) {
-    user = await this.findOne({ email: login });
-  }
+  this.password = hash;
+  next();
+});
 
-  return user;
+userSchema.methods.isValidPassword = async function (password) {
+  const user = this as IUser;
+  const compare = await bcrypt.compare(password, user.password);
+
+  return compare;
 };
 
-const User: Model<IUser> = model('User', userSchema);
+const User: Model<IUser> = model<IUser>('User', userSchema);
 
 export { User };
