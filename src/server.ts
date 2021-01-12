@@ -2,20 +2,14 @@
 import 'dotenv/config';
 import express, { NextFunction } from 'express';
 import logger from 'morgan';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import session from 'express-session';
-import sessionFileStore from 'session-file-store';
-const FileStore = sessionFileStore(session);
 
 import connectDB from './database';
 import routes from './routes';
-import auth from './middlewares/auth';
-import { BadRequestError } from './middlewares/error-handler';
+// @ts-ignore: Unreachable code error
+require('./middlewares/passport-handler');
 
-export interface IGetUserAuthInfoRequest extends Request {
-  user: string; // or any other type
-}
+import { BadRequestError } from './middlewares/error-handler';
 
 const app = express();
 
@@ -27,32 +21,17 @@ connectDB();
 // Third-Party Middleware
 app.use(cors());
 app.use(logger('dev'));
-app.use(
-  session({
-    name: 'session-id',
-    secret: '12345-67890-09876-54321',
-    saveUninitialized: false,
-    resave: true,
-    store: new FileStore(),
-  }),
-);
 
 // Built-In Middleware
 app.set('port', process.env.PORT || 3000);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Health check
-app.use('/health', routes.health);
-
-app.use('/users', routes.user);
-
-// Custome Middleware
-app.use(auth);
-
 // * Routes * //
+app.use('/health', routes.health);
 app.use('/lists', routes.list);
 app.use('/docs', routes.docs);
+app.use('/users', routes.user);
 
 app.get('*', function (req, res, next) {
   const error = new BadRequestError(

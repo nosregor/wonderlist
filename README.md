@@ -50,3 +50,9 @@ Format your code in watch mode, waiting for file changes.
 ### Ressources
 
 - Using ESLint and Prettier in a TypeScript Project: https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project
+
+### Authentication
+
+- https://levelup.gitconnected.com/everything-you-need-to-know-about-the-passport-local-passport-js-strategy-633bbab6195
+
+- https://mannhowie.com/auth
