@@ -4,6 +4,7 @@ import { Document, Model, model, Schema } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   password: string;
+  admin: Boolean;
 }
 
 const userSchema = new Schema(
@@ -16,6 +17,10 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    admin: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true },

@@ -7,6 +7,7 @@ import cors from 'cors';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store';
 const FileStore = sessionFileStore(session);
+
 import connectDB from './database';
 import routes from './routes';
 import auth from './middlewares/auth';
@@ -31,7 +32,7 @@ app.use(
     name: 'session-id',
     secret: '12345-67890-09876-54321',
     saveUninitialized: false,
-    resave: false,
+    resave: true,
     store: new FileStore(),
   }),
 );
@@ -41,16 +42,16 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Health check
+app.use('/health', routes.health);
+
+app.use('/users', routes.user);
+
 // Custome Middleware
 app.use(auth);
 
 // * Routes * //
-app.get('/', (_req, res) => {
-  res.send({ message: 'Service is healthy', date: new Date() });
-});
 app.use('/lists', routes.list);
-app.use('/users', routes.user);
-
 app.use('/docs', routes.docs);
 
 app.get('*', function (req, res, next) {
