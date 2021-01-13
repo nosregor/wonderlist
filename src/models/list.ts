@@ -1,5 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { ITask } from './task';
+import { ITask, Task } from './task';
 import { IUser } from './user';
 
 export interface IList extends Document {
@@ -30,8 +30,18 @@ const ListSchema = new Schema(
 
 //https://xjavascript.com/view/3705349/cascade-style-delete-in-mongoose
 //https://dev.to/kwabenberko/implementing-sql--like-cascades-in-mongoose-bap
-ListSchema.pre('remove', async function () {
-  this.model('Task').deleteMany({ list: this._id });
+ListSchema.pre<IList>('remove', async function (next) {
+  console.log('DELETING');
+  try {
+    await Task.remove({
+      _id: {
+        $in: this.tasks,
+      },
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const List: Model<IList> = model('List', ListSchema);
