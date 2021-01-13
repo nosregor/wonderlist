@@ -1,0 +1,29 @@
+{
+  "lists": [
+    {
+      "title": "Shopping List",
+      "user": "",
+      "tasks": [
+        {
+          "title": "Apple",
+          "list": ""
+        },
+        {
+          "title": "Banana"
+        }
+      ]
+    },
+    {
+      "name": "Zucchipakoda",
+      "user": "",
+      "tasks": [
+        {
+          "title": "Pear"
+        },
+        {
+          "title": "Oranges"
+        }
+      ]
+    }
+  ]
+}

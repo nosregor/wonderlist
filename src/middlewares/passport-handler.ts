@@ -8,7 +8,7 @@ import { User } from '../models/user';
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 
-// SIGN UP AND HASG PASSWORD STRATEGY
+// SIGN UP / PASSWORD STRATEGY
 passport.use(
   'signup',
   new LocalStrategy(
@@ -36,7 +36,7 @@ passport.use(
   ),
 );
 
-// USER LOGIN AUTHENTICATION STRATEGY
+// USER LOGIN / AUTHENTICATION STRATEGY
 passport.use(
   'login',
   new LocalStrategy(
@@ -79,7 +79,6 @@ passport.use(
       secretOrKey: 'TOP_SECRET',
     },
     async (jwtToken: any, done: any) => {
-      console.log('JWT payload: ', jwtToken);
       try {
         const {
           user: { _id },
@@ -87,7 +86,6 @@ passport.use(
         const users = await User.findOne({
           _id: _id,
         });
-        console.log(users, 'USER');
         return done(null, users, jwtToken);
       } catch (error) {
         done(error, null);

@@ -29,9 +29,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // * Routes * //
 app.use('/health', routes.health);
-app.use('/lists', routes.list);
-app.use('/docs', routes.docs);
 app.use('/users', routes.user);
+app.use('/lists', routes.list);
+app.use('/tasks', routes.task);
+app.use('/docs', routes.docs);
 
 app.get('*', function (req, res, next) {
   const error = new BadRequestError(
