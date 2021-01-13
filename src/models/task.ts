@@ -1,5 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { IList } from './list';
+import { IList, List } from './list';
 import { IUser } from './user';
 
 export interface ITask extends Document {
@@ -9,7 +9,7 @@ export interface ITask extends Document {
   user: IUser;
 }
 
-const taskSchema = new Schema(
+const TaskSchema = new Schema(
   {
     title: {
       type: String,
@@ -31,6 +31,6 @@ const taskSchema = new Schema(
   { timestamps: true },
 );
 
-const Task: Model<ITask> = model('Task', taskSchema);
+const Task: Model<ITask> = model('Task', TaskSchema);
 
 export { Task };

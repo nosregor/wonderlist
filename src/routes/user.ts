@@ -2,23 +2,22 @@ import { Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken'; // used to create, sign, and verify tokens
 
-import { User } from '../models/user';
+import * as userRepository from '../repositories/user';
 import { BadRequestError } from '../middlewares/error-handler';
 
 const router: Router = Router();
 
-/* GET users listing. */
 router.options('*', (req, res) => {
   res.sendStatus(200);
 });
 
 router.get(
   '/',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const users = await User.find().catch((error: any) =>
-      next(new BadRequestError(error)),
-    );
+    const users = await userRepository
+      .getUsers()
+      .catch((error: any) => next(BadRequestError.from(error)));
 
     return res.send(users);
   },
