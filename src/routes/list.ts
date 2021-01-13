@@ -3,7 +3,6 @@ import { BadRequestError } from '../middlewares/error-handler';
 import { IList, List } from '../models/list';
 import passport from 'passport';
 import { ITask, Task } from '../models/task';
-import { ObjectId } from 'mongoose';
 
 const router = Router();
 
@@ -12,30 +11,23 @@ router
   .get(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      // @ts-ignore: Unreachable code error
-
-      const user = req.user._id;
+      const user = req.user;
       const lists = await List.find({
         user: user,
-      }).catch((error: any) => next(new BadRequestError(error)));
-      console.log(lists);
+      })
+        .populate('user')
+        .catch((error: any) => next(new BadRequestError(error)));
+
       return res.send(lists);
     },
   )
   .post(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      console.log(req.user, 'POST LIST');
-      // @ts-ignore: Unreachable code error
-
-      const user = req.user._id;
       const list = await List.create({
         title: req.body.title,
-        user: user,
+        user: req.user,
       }).catch((error) => next(BadRequestError.from(error)));
-      // @ts-ignore: Unreachable code error
-
-      await list.populate('users');
 
       return res.send(list);
     },
@@ -83,13 +75,19 @@ router
   .put(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
+      const filter = { _id: req.params.listId };
+      const update = {
+        $set: req.body,
+      };
+      const options = { new: true };
+
       const list = await List.findByIdAndUpdate(
-        req.params.listId,
-        {
-          $set: req.body,
-        },
-        { new: true },
+        filter,
+        update,
+        options,
       ).catch((error: any) => next(new BadRequestError(error)));
+
+      return res.send(list);
     },
   )
   // DELETE LIST and tasks
@@ -138,7 +136,6 @@ router
   .put(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      console.log(req.body);
       const task = await Task.findByIdAndUpdate(
         req.params.taskId,
         {
@@ -146,14 +143,12 @@ router
         },
         { new: true },
       );
-
       const list = await List.findById({
         _id: req.params.listId,
         'tasks._id': req.params.taskId,
       })
         .populate('tasks')
         .catch((error: any) => next(new BadRequestError(error)));
-
       console.log(task);
       return res.send(list);
     },
@@ -177,13 +172,6 @@ router
       )
         .populate('user')
         .catch((error: any) => next(new BadRequestError(error)));
-      // const list = await List.findById(
-      //   req.params.listId,
-      // ).catch((error: any) => next(new BadRequestError(error)));
-
-      // if (list) {
-      //   await list.remove();
-      // }
 
       return res.send(list);
     },
