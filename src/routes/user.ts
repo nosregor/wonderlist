@@ -2,7 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken'; // used to create, sign, and verify tokens
 
-import { User } from '../models';
+import { User } from '../models/user';
 import { BadRequestError } from '../middlewares/error-handler';
 
 const router: Router = Router();
@@ -12,13 +12,17 @@ router.options('*', (req, res) => {
   res.sendStatus(200);
 });
 
-router.get('/', async (_req, res, next) => {
-  const users = await User.find().catch((error: any) =>
-    next(new BadRequestError(error)),
-  );
+router.get(
+  '/',
+  // passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    const users = await User.find().catch((error: any) =>
+      next(new BadRequestError(error)),
+    );
 
-  return res.send(users);
-});
+    return res.send(users);
+  },
+);
 
 // SIGNUP
 router.post(
