@@ -68,10 +68,27 @@ router.post('/login', async (req, res, next) => {
 });
 
 // user logout
-router.get('/logout', async (req, res, next) => {
-  console.log('LOGOUT');
-  req.logout();
-  res.redirect('/');
-});
+router.get(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next): Promise<void> => {
+    if (!req.user) {
+      res.send({
+        status: 401,
+        logged: false,
+        message: 'You are not logged in!',
+      });
+    }
+    if (req.user) {
+      delete req.headers.authorization; // destroy session on server side
+      req.logout();
+      res.send({
+        status: 200,
+        logged: false,
+        message: 'Successfully logged out!',
+      });
+    }
+  },
+);
 
 export default router;

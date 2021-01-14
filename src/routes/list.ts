@@ -55,7 +55,7 @@ router
       let list: IList = await List.findById(req.params.listId);
 
       if (list != null) {
-        const task = await Task.create({
+        const task: any = await Task.create({
           title: req.body.title,
           list: req.body.list,
           user: req.body.user,

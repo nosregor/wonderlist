@@ -2,6 +2,13 @@ import { Document, Model, model, Schema } from 'mongoose';
 import { IList } from './list';
 import { IUser } from './user';
 
+import * as connections from '../database/index';
+
+/**
+ * @export
+ * @interface ITask
+ * @extends {Document}
+ */
 export interface ITask extends Document {
   title: String;
   status: String;
@@ -9,7 +16,7 @@ export interface ITask extends Document {
   user: IUser;
 }
 
-const taskSchema = new Schema(
+const TaskSchema = new Schema(
   {
     title: {
       type: String,
@@ -31,6 +38,4 @@ const taskSchema = new Schema(
   { timestamps: true },
 );
 
-const Task: Model<ITask> = model('Task', taskSchema);
-
-export { Task };
+export const Task = connections.db.model('Task', TaskSchema);
