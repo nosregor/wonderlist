@@ -14,6 +14,7 @@ const connectOptions: ConnectionOptions = {
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: false,
+  poolSize: 5,
 };
 
 const MONGO_URI: string = `${config.database.MONGO_URI}${config.database.MONGODB_DB_MAIN}`;
