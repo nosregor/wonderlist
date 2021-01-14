@@ -1,9 +1,9 @@
 import { IList, List } from '../models/list';
-import { IUser } from '../models/user';
 
-async function createList(body: IList): Promise<IList> {
+async function createList(body: any): Promise<IList> {
   try {
-    return List.create(body);
+    // @ts-ignore: Unreachable code error
+    return List.create(body) as IList;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -20,6 +20,7 @@ async function getListsByUserId(userId: string): Promise<IList[]> {
 
 async function getListById(params: string): Promise<IList> {
   try {
+    console.log(params, 'params');
     return List.findById(params).populate('tasks');
   } catch (error) {
     throw new Error(error.message);
