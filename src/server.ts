@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import 'dotenv/config';
 import express, { NextFunction } from 'express';
 import logger from 'morgan';
@@ -27,7 +26,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/health', routes.health);
 app.use('/users', routes.user);
 app.use('/lists', routes.list);
-app.use('/tasks', routes.task);
 app.use('/docs', routes.docs);
 
 app.get('*', function (req, res, next) {

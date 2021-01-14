@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { BadRequestError } from '../middlewares/error-handler';
-import { IList, List } from '../models/list';
 import passport from 'passport';
-import { ITask, Task } from '../models/task';
 
+import { BadRequestError } from '../middlewares/error-handler';
+import * as listRepository from '../repositories/list';
+import * as taskRepository from '../repositories/task';
+taskRepository;
 const router = Router();
 
 router
@@ -11,11 +12,10 @@ router
   .get(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const user = req.user;
-      const lists = await List.find({
-        user: user,
-      })
-        .populate('user')
+      console.log('HELLO');
+      const lists = await listRepository
+        // @ts-ignore: Unreachable code error
+        .getListsByUserId(req.user._id)
         .catch((error: any) => next(new BadRequestError(error)));
 
       return res.send(lists);
@@ -24,10 +24,9 @@ router
   .post(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const list = await List.create({
-        title: req.body.title,
-        user: req.user,
-      }).catch((error) => next(BadRequestError.from(error)));
+      const list = await listRepository
+        .createList(req.body)
+        .catch((error) => next(BadRequestError.from(error)));
 
       return res.send(list);
     },
@@ -35,39 +34,31 @@ router
 
 router
   .route('/:listId')
-  // GET LIST and populate TASKS
   .get(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const list = await List.findById(req.params.listId)
-        .populate('tasks')
+      console.log(req.params.listId);
+      const list = await listRepository
+        .getListById(req.params.listId)
         .catch((error: any) => next(new BadRequestError(error)));
 
       return res.json(list);
     },
   )
-  // CREATE TASK and add to respective LIST
   .post(
     passport.authenticate('jwt', { session: false }),
     async (req: any, res, next) => {
       req.body.user = req.user._id;
 
-      let list: IList = await List.findById(req.params.listId);
+      let list = await listRepository.getListById(req.params.listId);
 
       if (list != null) {
-        const task: any = await Task.create({
-          title: req.body.title,
-          list: req.body.list,
-          user: req.body.user,
-        });
+        const listWithTasks = await taskRepository.createTask(
+          list,
+          req.body,
+        );
 
-        await list.tasks.push(task);
-        const savedList = await list.save();
-        const returnList = await List.findById(
-          savedList._id,
-        ).populate('tasks');
-
-        res.send(returnList);
+        res.send(listWithTasks);
       }
     },
   )
@@ -75,17 +66,9 @@ router
   .put(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const filter = { _id: req.params.listId };
-      const update = {
-        $set: req.body,
-      };
-      const options = { new: true };
-
-      const list = await List.findByIdAndUpdate(
-        filter,
-        update,
-        options,
-      ).catch((error: any) => next(new BadRequestError(error)));
+      const list = await listRepository
+        .updateListById({ body: req.body, listId: req.params.listId })
+        .catch((error: any) => next(new BadRequestError(error)));
 
       return res.send(list);
     },
@@ -94,13 +77,9 @@ router
   .delete(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const list = await List.findById(
-        req.params.listId,
-      ).catch((error: any) => next(new BadRequestError(error)));
-
-      if (list) {
-        await list.remove();
-      }
+      const list = await listRepository
+        .deleteListById(req.params.listId)
+        .catch((error: any) => next(new BadRequestError(error)));
 
       return res.send(list);
     },
@@ -108,27 +87,13 @@ router
 
 router
   .route('/:listId/tasks/:taskId')
-  // GET TASK from LIST
   .get(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const list = await List.findById({
-        _id: req.params.listId,
-      })
-        .populate('tasks')
+      const task = await taskRepository
+        .getTaskFromList(req.params.listId, req.params.taskId)
         .catch((error: any) => next(new BadRequestError(error)));
 
-      const task = list.tasks.filter(
-        (task: ITask) => String(task._id) === req.params.taskId,
-      );
-
-      if (task === null) {
-        let err: any = new Error(
-          `Task ${req.params.taskId} not found`,
-        );
-        err.status = 404;
-        return next(err);
-      }
       return res.send(task);
     },
   )
@@ -136,20 +101,14 @@ router
   .put(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const task = await Task.findByIdAndUpdate(
-        req.params.taskId,
-        {
-          $set: req.body,
-        },
-        { new: true },
-      );
-      const list = await List.findById({
-        _id: req.params.listId,
-        'tasks._id': req.params.taskId,
-      })
-        .populate('tasks')
+      const list = await taskRepository
+        .updateTaskFromList(
+          req.params.listId,
+          req.params.taskId,
+          req.body,
+        )
         .catch((error: any) => next(new BadRequestError(error)));
-      console.log(task);
+
       return res.send(list);
     },
   )
@@ -157,20 +116,9 @@ router
   .delete(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const { listId, taskId } = req.params;
-      const user = req.user;
-
-      const filter = { user: user };
-      const update = { $pull: { tasks: taskId } };
-      const options = { new: true };
-
-      const list = await List.findOneAndUpdate(
-        filter,
+      const list = await taskRepository
         // @ts-ignore: Unreachable code error
-        update,
-        options,
-      )
-        .populate('user')
+        .deleteTaskFromList(req.params.taskId, req.user)
         .catch((error: any) => next(new BadRequestError(error)));
 
       return res.send(list);

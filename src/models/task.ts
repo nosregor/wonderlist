@@ -1,5 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
-import { IList } from './list';
+import { IList, List } from './list';
 import { IUser } from './user';
 
 import * as connections from '../database/index';
@@ -38,4 +38,6 @@ const TaskSchema = new Schema(
   { timestamps: true },
 );
 
-export const Task = connections.db.model('Task', TaskSchema);
+const Task = connections.db.model('Task', TaskSchema);
+
+export { Task };
