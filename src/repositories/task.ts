@@ -4,7 +4,7 @@ import { IUser } from '../models/user';
 
 async function createTask(list: IList, body: any): Promise<ITask> {
   try {
-    const task = await Task.create(body);
+    const task = (await Task.create(body)) as ITask;
     await list.tasks.push(task);
     const savedList = await list.save();
 
@@ -22,6 +22,10 @@ async function getTaskFromList(
     const list = await List.findById({
       _id: listId,
     }).populate('tasks');
+
+    if (!list) {
+      return [];
+    }
 
     const task = list.tasks.filter(
       (task: ITask) => String(task._id) === taskId,
