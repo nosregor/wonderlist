@@ -3,7 +3,6 @@ import express, { NextFunction } from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 
-import connectDB from './database';
 import routes from './routes';
 // @ts-ignore: Unreachable code error
 require('./middlewares/passport-handler');
@@ -11,9 +10,6 @@ require('./middlewares/passport-handler');
 import { BadRequestError } from './middlewares/error-handler';
 
 const app = express();
-
-// Connect to MONGODB
-connectDB();
 
 // * Application-Level Middleware * //
 

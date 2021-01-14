@@ -1,23 +1,35 @@
 import { Document, Model, model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import * as connections from '../database/index';
 
+/**
+ * @export
+ * @interface IUser
+ * @extends {Document}
+ */
 export interface IUser extends Document {
+  // porperties
   username: string;
   email: string;
   password: string;
   admin: Boolean;
+  // methods
+  getFullGender(): (passpword: string) => Promise<boolean>;
 }
 
-const userSchema = new Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
       default: '',
+      index: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "can't be blank"],
       unique: true,
+      lowercase: true,
+      index: true,
     },
     password: {
       type: String,
@@ -29,23 +41,39 @@ const userSchema = new Schema(
     },
   },
   { timestamps: true },
-);
+).pre('save', async function (next): Promise<void> {
+  // tslint:disable-line
+  const user: any = this;
+  console.log(this);
+  try {
+    const salt: string = await bcrypt.genSalt(10);
 
-userSchema.pre<IUser>('save', async function (next) {
-  const user = this;
-  const hash = await bcrypt.hash(this.password, 10);
+    const hash: string = await bcrypt.hash(user.password, salt);
 
-  this.password = hash;
-  next();
+    user.password = hash;
+    next();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-userSchema.methods.isValidPassword = async function (password) {
-  const user = this as IUser;
-  const compare = await bcrypt.compare(password, user.password);
+/**
+ * Method for comparing passwords
+ */
+UserSchema.methods.isValidPassword = async function (
+  userPassword: string,
+): Promise<Boolean> {
+  try {
+    const user: any = this;
 
-  return compare;
+    const compare: boolean = await bcrypt.compare(
+      userPassword,
+      user.password,
+    );
+    return compare;
+  } catch (error) {
+    return error;
+  }
 };
 
-const User: Model<IUser> = model<IUser>('User', userSchema);
-
-export { User };
+export const User = connections.db.model('User', UserSchema);

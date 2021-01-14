@@ -1,7 +1,15 @@
-import { Document, Model, model, Schema } from 'mongoose';
-import { ITask, Task } from './task';
+import { Document, Schema } from 'mongoose';
+import { ITask } from './task';
+
 import { IUser } from './user';
 
+import * as connections from '../database/index';
+
+/**
+ * @export
+ * @interface IList
+ * @extends {Document}
+ */
 export interface IList extends Document {
   title: string;
   user: IUser;
@@ -28,6 +36,7 @@ const ListSchema = new Schema(
   { timestamps: true },
 );
 
+
 //https://xjavascript.com/view/3705349/cascade-style-delete-in-mongoose
 //https://dev.to/kwabenberko/implementing-sql--like-cascades-in-mongoose-bap
 ListSchema.pre<IList>('remove', async function (next) {
@@ -44,6 +53,6 @@ ListSchema.pre<IList>('remove', async function (next) {
   }
 });
 
-const List: Model<IList> = model('List', ListSchema);
+const List = connections.db.model('List', ListSchema);
 
 export { List };

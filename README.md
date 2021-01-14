@@ -54,5 +54,7 @@ Format your code in watch mode, waiting for file changes.
 ### Authentication
 
 - https://levelup.gitconnected.com/everything-you-need-to-know-about-the-passport-local-passport-js-strategy-633bbab6195
+- https://medium.com/swlh/everything-you-need-to-know-about-the-passport-jwt-passport-js-strategy-8b69f39014b0
+- https://levelup.gitconnected.com/deriving-signing-and-verifying-a-jwt-json-web-token-with-node-js-f3d0d12b1fc9
 
 - https://mannhowie.com/auth
