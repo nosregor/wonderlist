@@ -1,8 +1,7 @@
 import { connect, ConnectionOptions } from 'mongoose';
+import { MONGO_URI } from '../config/index';
 
 const connectDB = async () => {
-  // const mongoURI:string  = process.env.MONGO_URI;
-  const mongoURI = 'mongodb://localhost:27017/wonderlist-database';
   const connectOptions: ConnectionOptions = {
     useCreateIndex: true,
     useNewUrlParser: true,
@@ -11,7 +10,7 @@ const connectDB = async () => {
   };
 
   try {
-    await connect(mongoURI, connectOptions);
+    await connect(MONGO_URI, connectOptions);
 
     console.info(
       `Connected to database on Worker process: ${process.pid}`,
