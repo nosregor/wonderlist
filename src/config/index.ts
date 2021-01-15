@@ -18,7 +18,9 @@ function getStringEnv(
 ): string {
   const val = process.env[variable];
   if (!val) {
-    throw new Error(`Env variable; ${variable} not set`);
+    throw new Error(
+      `${variable} not found. Set ${variable} environment variable.`,
+    );
   }
   return val;
 }

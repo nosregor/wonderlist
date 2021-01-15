@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { Router } from 'express';
 
 const router = Router();

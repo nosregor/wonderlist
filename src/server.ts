@@ -1,57 +1,93 @@
-import 'dotenv/config';
-import express, { NextFunction } from 'express';
+import express, { NextFunction, Response, Request } from 'express';
 import logger from 'morgan';
 import cors from 'cors';
+import * as http from 'http-status-codes';
 
 import routes from './routes';
-// @ts-ignore: Unreachable code error
-require('./middlewares/passport-handler');
-
-import { BadRequestError } from './middlewares/error-handler';
+import { sendHttpErrorModule } from './middlewares/error/sendHttpError';
+import { HttpError } from './middlewares/error';
 
 const app = express();
-
 // * Application-Level Middleware * //
 
 // Third-Party Middleware
 app.use(cors());
 app.use(logger('dev'));
 
-// Built-In Middleware
-app.set('port', process.env.PORT || 3000);
+// express middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// providing a Connect/Express middleware that can be used to enable CORS with various options
+app.use(cors());
+
+// custom errors
+app.use(sendHttpErrorModule);
+
+// cors
+app.use((req, res, next) => {
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS ',
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With,' +
+      ' Content-Type, Accept,' +
+      ' Authorization,' +
+      ' Access-Control-Allow-Credentials',
+  );
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 // * Routes * //
+app.use('/auth', routes.auth);
 app.use('/health', routes.health);
 app.use('/users', routes.user);
 app.use('/lists', routes.list);
 app.use('/docs', routes.docs);
 
-app.get('*', function (req, res, next) {
-  const error = new BadRequestError(
-    `${req.ip} tried to access ${req.originalUrl}`,
-  );
-
-  error.statusCode = 301;
-
-  next(error);
+/**
+ * @description No results returned mean the object is not found
+ * @constructs
+ */
+app.use((req, res, next) => {
+  res.status(404).send(http.StatusCodes[404]);
 });
 
-// * Application-Level Middleware * //
+interface CustomResponse extends express.Response {
+  sendHttpError: (error: HttpError | Error, message?: string) => void;
+}
 
-app.use((error: any, req: any, res: any, next: NextFunction) => {
-  if (!error.statusCode) error.statusCode = 500;
+app.use(
+  // @ts-ignore: Unreachable code error
+  (
+    error: Error,
+    req: Request,
+    res: CustomResponse,
+    next: NextFunction,
+  ) => {
+    if (typeof error === 'number') {
+      error = new HttpError(error); // next(404)
+    }
+    console.error(error.name);
 
-  if (error.statusCode === 301) {
-    return res.status(301).redirect('/not-found');
-  }
+    if (error instanceof HttpError) {
+      res.sendHttpError(error);
+    } else {
+      if (app.get('env') === 'development') {
+        error = new HttpError(500, error.message);
+        res.sendHttpError(error);
+      } else {
+        error = new HttpError(500);
+        res.sendHttpError(error, error.message);
+      }
+    }
+  },
+);
 
-  return res
-    .status(error.statusCode)
-    .json({ error: error.toString() });
-});
-
+app.set('port', process.env.PORT || 3000);
 const port = app.get('port');
 app.listen(port, () =>
   console.log(`Server listening on port ${port}!`),

@@ -1,75 +1,35 @@
 import { Router } from 'express';
 import passport from 'passport';
 
-import { BadRequestError } from '../middlewares/error-handler';
-import * as listRepository from '../repositories/list';
+import * as listService from '../services/list';
 import taskRouter from './task';
+import { isAuthenticated } from '../middlewares/passportJwt';
 
 const router = Router();
 router.use('/:listId/tasks', taskRouter);
 
 router
   .route('/')
-  .get(
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      console.log(req.user);
-      console.log('HELLO');
-      const lists = await listRepository
-        // @ts-ignore: Unreachable code error
-        .getListsByUserId(req.user._id)
-        .catch((error: any) => next(new BadRequestError(error)));
-      console.log(lists);
-      return res.send(lists);
-    },
-  )
-  .post(
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      const list = await listRepository
-        .createList(req.body)
-        .catch((error) => next(BadRequestError.from(error)));
-
-      return res.send(list);
-    },
-  );
+  .get(isAuthenticated, async (req, res, next) => {
+    listService.getListsByUserId(req, res, next);
+  })
+  .post(isAuthenticated, async (req, res, next) => {
+    listService.createList(req, res, next);
+  });
 
 router
   .route('/:listId')
-  .get(
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      console.log(req.params.listId);
-      const list = await listRepository
-        .getListById(req.params.listId)
-        .catch((error: any) => next(new BadRequestError(error)));
-
-      return res.json(list);
-    },
-  )
-  // EDIT LIST title
-  .put(
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      const list = await listRepository
-        .updateListById({ body: req.body, listId: req.params.listId })
-        .catch((error: any) => next(new BadRequestError(error)));
-
-      return res.send(list);
-    },
-  )
-  // DELETE LIST and tasks
+  .get(isAuthenticated, async (req, res, next) => {
+    listService.getListById(req, res, next);
+  })
+  .put(isAuthenticated, async (req, res, next) => {
+    listService.updateListById(req, res, next);
+  })
   .delete(
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
-      const list = await listRepository
-        .deleteListById(req.params.listId)
-        .catch((error: any) => next(new BadRequestError(error)));
-
-      return res.send(list);
+      listService.deleteListById(req, res, next);
     },
   );
 
 export default router;
-
-// https://www.codegrepper.com/code-examples/javascript/mongoose+update+data+subdocument

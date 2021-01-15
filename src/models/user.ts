@@ -14,7 +14,7 @@ export interface IUser extends Document {
   password: string;
   admin: Boolean;
   // methods
-  getFullGender(): (passpword: string) => Promise<boolean>;
+  isValidPassword(password: string): () => Promise<boolean>;
 }
 
 const UserSchema = new Schema(

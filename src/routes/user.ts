@@ -3,7 +3,8 @@ import passport from 'passport';
 import jwt from 'jsonwebtoken'; // used to create, sign, and verify tokens
 
 import * as userRepository from '../repositories/user';
-import { BadRequestError } from '../middlewares/error-handler';
+import * as userService from '../services/user';
+import { isAuthenticated } from '../middlewares/passportJwt';
 
 const router: Router = Router();
 
@@ -11,23 +12,17 @@ router.options('*', (req, res) => {
   res.sendStatus(200);
 });
 
-router.get(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    const users = await userRepository
-      .getUsers()
-      .catch((error: any) => next(BadRequestError.from(error)));
-
-    return res.send(users);
-  },
-);
+router.get('/', async (req: any, res: any, next: any) => {
+  userService.getUsers(req, res, next);
+});
 
 // SIGNUP
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
   async (req, res, next) => {
+    console.log(req.user, 'HELLO');
+
     res.json({
       message: 'Signup successful',
       user: req.user,
@@ -69,8 +64,9 @@ router.post('/login', async (req, res, next) => {
 // user logout
 router.get(
   '/logout',
-  passport.authenticate('jwt', { session: false }),
+  isAuthenticated,
   async (req, res, next): Promise<void> => {
+    console.log(req.user);
     if (!req.user) {
       res.send({
         status: 401,
