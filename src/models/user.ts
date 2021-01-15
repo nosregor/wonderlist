@@ -44,7 +44,6 @@ const UserSchema = new Schema(
 ).pre('save', async function (next): Promise<void> {
   // tslint:disable-line
   const user: any = this;
-  console.log(this);
   try {
     const salt: string = await bcrypt.genSalt(10);
 

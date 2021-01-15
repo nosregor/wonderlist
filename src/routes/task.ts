@@ -13,7 +13,6 @@ router
 router
   .route('/:taskId')
   .get(isAuthenticated, async (req, res, next) => {
-    console.log('Im here');
     taskService.getTaskById(req, res, next);
   })
   .put(

@@ -20,14 +20,11 @@ export class HttpError extends Error {
     super(message);
 
     Error.captureStackTrace(this, this.constructor);
-    console.log(status);
     this.status = status || 500;
-    console.log(this.status);
 
     // @ts-ignore: Unreachable code error
     this.name = this.name;
     this.message = message || http.StatusCodes[this.status];
-    console.log(http.StatusCodes[this.status], 'httpstatus error');
   }
   //
 }

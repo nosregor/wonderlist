@@ -21,8 +21,6 @@ router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
   async (req, res, next) => {
-    console.log(req.user, 'HELLO');
-
     res.json({
       message: 'Signup successful',
       user: req.user,
@@ -42,12 +40,10 @@ router.post('/login', async (req, res, next) => {
 
       req.login(user, { session: false }, async (error) => {
         if (error) return next(error);
-        console.log(user, 'USER');
         const body = { _id: user._id, email: user.email };
         const token = jwt.sign({ user: body }, 'TOP_SECRET', {
           expiresIn: 3600, // 1 hour
         });
-        console.log(token, 'JWT');
 
         return res.json({
           success: true,
@@ -66,7 +62,6 @@ router.get(
   '/logout',
   isAuthenticated,
   async (req, res, next): Promise<void> => {
-    console.log(req.user);
     if (!req.user) {
       res.send({
         status: 401,

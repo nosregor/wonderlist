@@ -20,7 +20,6 @@ async function getListsByUserId(userId: string): Promise<IList[]> {
 
 async function getListById(params: string): Promise<IList> {
   try {
-    console.log(params, 'params');
     return List.findById(params).populate('tasks');
   } catch (error) {
     throw new Error(error.message);
