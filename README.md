@@ -1,4 +1,4 @@
-# Wonderlist Task/Reminder List 
+# Wonderlist  
 ![Node.js CI](https://github.com/nosregor/wonderlist/workflows/Node.js%20CI/badge.svg) 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)](https://www.typescriptlang.org)
