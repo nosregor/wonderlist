@@ -1,3 +1,4 @@
+![Node.js CI](https://github.com/nosregor/wonderlist/workflows/Node.js%20CI/badge.svg)
 # wunderlist
 
 # 🧰 Simple TypeScript Starter | 2020
