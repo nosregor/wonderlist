@@ -14,10 +14,17 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
+    // allowImportExportEverywhere: true,
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true,
+    },
   },
   plugins: ['@typescript-eslint', 'prettier', 'jest'],
   rules: {
-    'no-console': 0,
+    'prettier/prettier': 'error',
+    'no-unused-vars': 'warn',
+    'comma-dangle': 0,
+    'no-console': 1,
     'prefer-template': 0,
   },
 };
