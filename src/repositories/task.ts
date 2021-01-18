@@ -63,7 +63,7 @@ async function updateTaskFromList(
 
 async function deleteTaskFromList(
   taskId: string,
-  user: IUser,
+  user: string,
 ): Promise<IList[]> {
   try {
     const filter = { user: user };

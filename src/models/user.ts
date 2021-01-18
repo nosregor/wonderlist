@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { model, Schema, Model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import * as connections from '../database/index';
 
@@ -12,9 +12,9 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  admin: Boolean;
+  admin: boolean;
   // methods
-  isValidPassword(password: string): () => Promise<boolean>;
+  isValidPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema = new Schema(
@@ -41,7 +41,7 @@ const UserSchema = new Schema(
     },
   },
   { timestamps: true },
-).pre('save', async function (next): Promise<void> {
+).pre<IUser>('save', async function (next): Promise<void> {
   // tslint:disable-line
   const user: any = this;
   try {
@@ -61,7 +61,7 @@ const UserSchema = new Schema(
  */
 UserSchema.methods.isValidPassword = async function (
   userPassword: string,
-): Promise<Boolean> {
+): Promise<boolean> {
   try {
     const user: any = this;
 
@@ -75,4 +75,4 @@ UserSchema.methods.isValidPassword = async function (
   }
 };
 
-export const User = connections.db.model('User', UserSchema);
+export const User: Model<IUser> = model('User', UserSchema);

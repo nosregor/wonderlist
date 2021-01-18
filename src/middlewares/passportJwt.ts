@@ -37,6 +37,7 @@ passport.use(
     },
   ),
 );
+
 /**
  * @description Login Required middleware.
  * Verify incoming user using the passport JWT strategy.

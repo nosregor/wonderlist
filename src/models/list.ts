@@ -1,4 +1,4 @@
-import { Document, Schema } from 'mongoose';
+import { model, Schema, Model, Document } from 'mongoose';
 import { ITask, Task } from './task';
 
 import { IUser } from './user';
@@ -12,7 +12,7 @@ import * as connections from '../database/index';
  */
 export interface IList extends Document {
   title: string;
-  user: IUser;
+  user: string;
   tasks: ITask[];
 }
 
@@ -51,6 +51,6 @@ ListSchema.pre<IList>('remove', async function (next) {
   }
 });
 
-const List = connections.db.model('List', ListSchema);
+const List: Model<IList> = model('List', ListSchema);
 
 export { List };

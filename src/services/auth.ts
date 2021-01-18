@@ -1,13 +1,13 @@
 import * as userRepository from '../repositories/user';
 import jwt from 'jsonwebtoken'; // used to create, sign, and verify tokens
 import { HttpError } from '../middlewares/error';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-async function signup(
+const signup = async (
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> {
+): Promise<void> => {
   try {
     const user = await userRepository.createUser(req.body);
 
@@ -29,10 +29,9 @@ async function signup(
     if (error.code === 500) {
       return next(new HttpError(error.message.status, error.message));
     }
-    res.json({ status: 400, message: error.message });
+    res.status(400).json({ status: 400, message: error.message });
   }
-}
-// $2b$10$z3FhLO5h/Dvmg4T1VdqqOOMlRrjTXBXPRnnLlsvDjjfdMOZT6gP9K
+};
 
 async function login(
   req: Request,
@@ -40,8 +39,6 @@ async function login(
   next: NextFunction,
 ): Promise<void> {
   try {
-    // @ts-ignore: Unreachable code error
-
     const user = await userRepository.getUser(req.body);
 
     const token: string = jwt.sign(
@@ -59,7 +56,7 @@ async function login(
     if (error.code === 500) {
       return next(new HttpError(error.message.status, error.message));
     }
-    res.json({ status: 400, message: error.message });
+    res.status(400).json({ status: 400, message: error.message });
   }
 }
 
