@@ -1,5 +1,6 @@
-# Wonderlist  
-![Node.js CI](https://github.com/nosregor/wonderlist/workflows/Node.js%20CI/badge.svg) 
+# Wonderlist
+
+![Node.js CI](https://github.com/nosregor/wonderlist/workflows/Node.js%20CI/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)](https://www.typescriptlang.org)
 
@@ -60,18 +61,22 @@ Format your code in watch mode, waiting for file changes.
 - https://medium.com/swlh/everything-you-need-to-know-about-the-passport-jwt-passport-js-strategy-8b69f39014b0
 - https://levelup.gitconnected.com/deriving-signing-and-verifying-a-jwt-json-web-token-with-node-js-f3d0d12b1fc9 -http://toon.io/understanding-passportjs-authentication-flow/
 - https://mannhowie.com/auth
-- https://hackmd.io/@abernier/SJrDZvRTB?type=view
 
 ### Update subdocuments Mongoose
 
 - https://www.codegrepper.com/code-examples/javascript/mongoose+update+data+subdocument
 
-### Mongoose
+### Mongoose, Testing, Jest
 
 - https://developer.aliyun.com/mirror/npm/package/mamodom-mongodb-memory-server
 - https://dev.to/dyarleniber/parallel-tests-in-node-js-with-jest-and-mongodb-without-mocking-4jj2
 - https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
 - https://www.freecodecamp.org/news/end-point-testing/#part1
+- https://zellwk.com/blog/endpoint-testing/
+- https://hackmd.io/@abernier/SJrDZvRTB?type=view
+- https://www.freecodecamp.org/news/end-point-testing/
+- https://zellwk.com/blog/jest-and-mongoose/
+- https://dev.to/ziishaned/open-multiple-mongodb-connection-in-express-js-app-36be
 
 ### Seeding
 
