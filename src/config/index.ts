@@ -66,6 +66,4 @@ const config: {
   [name: string]: IConfig;
 } = { test, development, production };
 
-console.log(config[NODE_ENV]);
-
 export default config[NODE_ENV];
