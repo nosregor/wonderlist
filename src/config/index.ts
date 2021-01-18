@@ -2,12 +2,13 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+console.log(process.env.NODE_ENV);
+
 interface IConfig {
   name: string;
   port: string | number;
   database: {
     MONGO_URI: string;
-    MONGODB_DB_MAIN: string;
   };
   secret: string;
 }
@@ -31,11 +32,7 @@ const PORT: string | number = getStringEnv('PORT', '3000');
 const SECRET = getStringEnv('SECRET', 'TOP_SECRET');
 const MONGO_URI = getStringEnv(
   'MONGO_URI',
-  'mongodb://localhost:27017/',
-);
-const MONGODB_DB_MAIN = getStringEnv(
-  'MONGODB_DB_MAIN',
-  'wonderlist_database',
+  'mongodb://localhost:27017/wonderlist-database',
 );
 
 const development: IConfig = {
@@ -43,7 +40,6 @@ const development: IConfig = {
   port: PORT,
   database: {
     MONGO_URI: MONGO_URI,
-    MONGODB_DB_MAIN: MONGODB_DB_MAIN,
   },
   secret: SECRET,
 };
@@ -53,7 +49,6 @@ const production: IConfig = {
   port: PORT,
   database: {
     MONGO_URI: MONGO_URI,
-    MONGODB_DB_MAIN: MONGODB_DB_MAIN,
   },
   secret: SECRET,
 };
@@ -63,7 +58,6 @@ const test: IConfig = {
   port: PORT,
   database: {
     MONGO_URI: MONGO_URI,
-    MONGODB_DB_MAIN: MONGODB_DB_MAIN,
   },
   secret: SECRET,
 };
@@ -71,5 +65,7 @@ const test: IConfig = {
 const config: {
   [name: string]: IConfig;
 } = { test, development, production };
+
+console.log(config[NODE_ENV]);
 
 export default config[NODE_ENV];

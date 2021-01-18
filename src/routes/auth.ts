@@ -1,5 +1,6 @@
 import * as authService from '../services/auth';
 import { NextFunction, Request, Response, Router } from 'express';
+import { check } from 'prettier';
 
 const router = Router();
 

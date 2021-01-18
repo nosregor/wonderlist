@@ -65,3 +65,14 @@ Format your code in watch mode, waiting for file changes.
 ### Update subdocuments Mongoose
 
 - https://www.codegrepper.com/code-examples/javascript/mongoose+update+data+subdocument
+
+### Mongoose
+
+- https://developer.aliyun.com/mirror/npm/package/mamodom-mongodb-memory-server
+- https://dev.to/dyarleniber/parallel-tests-in-node-js-with-jest-and-mongodb-without-mocking-4jj2
+- https://dev.to/paulasantamaria/testing-node-js-mongoose-with-an-in-memory-database-32np
+- https://www.freecodecamp.org/news/end-point-testing/#part1
+
+### Seeding
+
+- https://dev.to/ziishaned/open-multiple-mongodb-connection-in-express-js-app-36be

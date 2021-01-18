@@ -1,6 +1,10 @@
 import { IUser, User } from '../models/user';
 
-export async function getUsers(): Promise<IUser[]> {
+/**
+ * Get all users from the database.
+ * @throws {Error} If there is something wrong with the request.
+ */
+async function getUsers(): Promise<IUser[]> {
   try {
     return User.find({});
   } catch (error) {
@@ -38,9 +42,8 @@ async function getUser(body: IUser): Promise<IUser> {
     const user: IUser = await User.findOne({
       email: body.email,
     });
-    // @ts-ignore: Unreachable code error
 
-    const isValidPassword: boolean =
+    const isValidPassword =
       user && (await user.isValidPassword(body.password));
 
     if (!isValidPassword) {
@@ -52,4 +55,4 @@ async function getUser(body: IUser): Promise<IUser> {
   }
 }
 
-export { createUser, getUser };
+export { createUser, getUsers, getUser };

@@ -8,10 +8,6 @@ import { isAuthenticated } from '../middlewares/passportJwt';
 
 const router: Router = Router();
 
-router.options('*', (req, res) => {
-  res.sendStatus(200);
-});
-
 router.get('/', async (req: any, res: any, next: any) => {
   userService.getUsers(req, res, next);
 });

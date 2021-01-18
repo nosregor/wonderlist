@@ -1,5 +1,5 @@
-import { Document, Model, model, Schema } from 'mongoose';
-import { IList, List } from './list';
+import { model, Schema, Model, Document } from 'mongoose';
+import { IList } from './list';
 import { IUser } from './user';
 
 import * as connections from '../database/index';
@@ -10,8 +10,8 @@ import * as connections from '../database/index';
  * @extends {Document}
  */
 export interface ITask extends Document {
-  title: String;
-  status: String;
+  title: string;
+  status: string;
   list: IList;
   user: IUser;
 }
@@ -38,6 +38,6 @@ const TaskSchema = new Schema(
   { timestamps: true },
 );
 
-const Task = connections.db.model('Task', TaskSchema);
+const Task: Model<ITask> = model('Task', TaskSchema);
 
 export { Task };

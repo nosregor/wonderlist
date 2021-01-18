@@ -3,7 +3,7 @@ import { HttpError } from '../middlewares/error';
 import { IUser, User } from '../models/user';
 import * as userRepository from '../repositories/user';
 
-export async function getUsers(
+async function getUsers(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -16,3 +16,5 @@ export async function getUsers(
     next(new HttpError(error.message.status, error.message));
   }
 }
+
+export { getUsers };
