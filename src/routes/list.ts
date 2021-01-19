@@ -8,6 +8,7 @@ import { isAuthenticated } from '../middlewares/passportJwt';
 const router = Router();
 router.use('/:listId/tasks', taskRouter);
 
+// TODO: remove async
 router
   .route('/')
   .get(isAuthenticated, async (req, res, next) => {
@@ -25,11 +26,8 @@ router
   .put(isAuthenticated, async (req, res, next) => {
     listService.updateListById(req, res, next);
   })
-  .delete(
-    passport.authenticate('jwt', { session: false }),
-    async (req, res, next) => {
-      listService.deleteListById(req, res, next);
-    },
-  );
+  .delete(isAuthenticated, async (req, res, next) => {
+    listService.deleteListById(req, res, next);
+  });
 
 export default router;

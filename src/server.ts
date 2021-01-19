@@ -1,5 +1,4 @@
 import { app } from './app';
-
 import { connectDB } from './database/index';
 
 app.set('port', process.env.PORT || 3000);

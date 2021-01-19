@@ -26,5 +26,4 @@ export class HttpError extends Error {
     this.name = this.name;
     this.message = message || http.StatusCodes[this.status];
   }
-  //
 }

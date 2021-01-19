@@ -14,7 +14,6 @@ export const connect = async () => {
     useUnifiedTopology: true,
     useCreateIndex: true,
   };
-  console.log(uri);
   await mongoose.connect(uri, mongooseOpts);
 };
 
