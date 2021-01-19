@@ -43,8 +43,8 @@ app.use((req, res, next) => {
 });
 
 // * Routes * //
+app.use('/', routes.health);
 app.use('/auth', routes.auth);
-app.use('/health', routes.health);
 app.use('/users', routes.user);
 app.use('/lists', routes.list);
 app.use('/docs', routes.docs);

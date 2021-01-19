@@ -15,11 +15,9 @@ const task_1 = require("../models/task");
 function createTask(list, body) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log({ list });
             const task = (yield task_1.Task.create(body));
             yield list.tasks.push(task);
             const savedList = yield list.save();
-            console.log({ savedList });
             return list_1.List.findById(savedList._id).populate('tasks');
         }
         catch (error) {

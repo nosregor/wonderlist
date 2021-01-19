@@ -54,8 +54,8 @@ app.use((req, res, next) => {
     next();
 });
 // * Routes * //
+app.use('/', routes_1.default.health);
 app.use('/auth', routes_1.default.auth);
-app.use('/health', routes_1.default.health);
 app.use('/users', routes_1.default.user);
 app.use('/lists', routes_1.default.list);
 app.use('/docs', routes_1.default.docs);
