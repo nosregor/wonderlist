@@ -81,3 +81,7 @@ Format your code in watch mode, waiting for file changes.
 ### Seeding
 
 - https://dev.to/ziishaned/open-multiple-mongodb-connection-in-express-js-app-36be
+
+### Deployment
+
+- Deploying Typescript Node.js applications to Heroku (with static files)

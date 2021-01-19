@@ -55,7 +55,7 @@ export const connectDB = async () => {
   });
 
   try {
-    const db = await connect(MONGO_URI, connectOptions);
+    const db: Mongoose = await connect(MONGO_URI, connectOptions);
   } catch (error) {
     throw error;
   }
