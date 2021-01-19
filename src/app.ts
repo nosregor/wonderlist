@@ -44,10 +44,10 @@ app.use((req, res, next) => {
 
 // * Routes * //
 app.use('/', routes.health);
-app.use('/auth', routes.auth);
-app.use('/users', routes.user);
-app.use('/lists', routes.list);
-app.use('/docs', routes.docs);
+app.use('/api/auth', routes.auth);
+app.use('/api/users', routes.user);
+app.use('/api/lists', routes.list);
+app.use('/api/docs', routes.docs);
 
 /**
  * @description No results returned mean the object is not found
