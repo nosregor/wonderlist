@@ -41,26 +41,22 @@ const UserRepository: IUserRepository = {
    * @memberof UserRepository
    */
   async createUser(body: IUser): Promise<IUser> {
-    try {
-      const user = new User({
-        email: body.email,
-        password: body.password,
-      });
+    // try {
+    const user = new User({
+      email: body.email,
+      password: body.password,
+    });
 
-      const query: IUser = await User.findOne({
-        email: body.email,
-      });
+    const query: IUser = await User.findOne({
+      email: body.email,
+    });
 
-      if (query) {
-        throw new Error('This email already exists');
-      }
+    const saved = await user.save();
 
-      const saved = await user.save();
-
-      return saved;
-    } catch (error) {
-      throw new Error(error);
-    }
+    return saved;
+    // } catch (error) {
+    //   throw error;
+    // }
   },
 
   /**

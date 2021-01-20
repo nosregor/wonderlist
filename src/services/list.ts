@@ -1,124 +1,77 @@
 import { NextFunction, Request, Response } from 'express';
+import { Mongoose } from 'mongoose';
+import { nextTick } from 'process';
+import { IList, List } from '../models/list';
 
-import { HttpError } from '../middlewares/error';
-import { IList } from '../models/list';
-import ListRepository from '../repositories/list';
+export interface IListService {
+  /**
+   * @param { IList } body
+   * @returns { Promise<IList[] }
+   * @interface IListService
+   */
+  createList(body: IList): Promise<IList>;
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function getListsByUserId(
-  req: any,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  const userId: string = req.user._id;
-  try {
-    const lists: IList[] = await ListRepository.getListsByUserId(
-      userId,
-    );
+  /**
+   * @param { string } userId
+   * @returns { Promise<IList[]r> }
+   * @interface IListService
+   */
+  getListsByUserId(userId: string): Promise<IList[]>;
 
-    res.status(200).json(lists);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
+  /**
+   * @param { string } listId
+   * @returns { Promise<IList[]> }
+   * @interface IListService
+   */
+  getListById(listId: string): Promise<IList>;
+
+  /**
+   * @param { IList } body
+   * @param { string } listId
+   * @returns { Promise<IList> }
+   * @interface IListService
+   */
+  updateListById(body: IList, listId: string): Promise<IList>;
+
+  /**
+   * @param { string } listId
+   * @returns { Promise<IList> }
+   * @interface IListService
+   */
+  deleteListById(listId: string): Promise<IList>;
 }
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function createList(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const list: IList = await ListRepository.createList(req.body);
+const ListService: IListService = {
+  async getListsByUserId(userId): Promise<IList[]> {
+    return List.findById(userId);
+  },
 
-    res.status(200).json(list);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
+  async createList(body): Promise<IList> {
+    return List.create(body);
+  },
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function getListById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const list: IList = await ListRepository.getListById(
-      req.params.listId,
-    );
+  async getListById(listId): Promise<IList> {
+    return List.findById(listId).populate('tasks');
+  },
 
-    res.status(200).json(list);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
+  async updateListById(body, listId): Promise<IList> {
+    const filter = { _id: listId };
+    const update = {
+      $set: body,
+    };
+    const options = { new: true };
 
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function updateListById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  const props = {
-    body: req.body,
-    listId: req.params.listId,
-  };
-  try {
-    const list: IList = await ListRepository.updateListById(props);
+    const list = List.findByIdAndUpdate(filter, update, options);
+    return list;
+  },
 
-    res.status(200).json(list);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
-
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function deleteListById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const list = await ListRepository.deleteListById(
-      req.params.listId,
-    );
-
-    res.status(200).json(list);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
-
-export {
-  createList,
-  getListsByUserId,
-  getListById,
-  updateListById,
-  deleteListById,
+  async deleteListById(listId): Promise<IList> {
+    const list: IList = await List.findById(listId);
+    if (list) {
+      await list.remove();
+    }
+    return list;
+  },
 };
+
+export default ListService;

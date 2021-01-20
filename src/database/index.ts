@@ -7,7 +7,8 @@ import {
 
 import config from '../config/index';
 
-// READ: https://mongoosejs.com/docs/connections.html
+// TODO: inversion control (init, shutDown, getConnection)
+// Add support for Inversion of Control through inversify
 const connectOptions: ConnectionOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,

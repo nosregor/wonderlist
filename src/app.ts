@@ -6,7 +6,6 @@ import * as http from 'http-status-codes';
 import routes from './routes';
 import { sendHttpErrorModule } from './middlewares/error/sendHttpError';
 import { HttpError } from './middlewares/error';
-import { connect } from 'http2';
 
 const app = express();
 // * Application-Level Middleware * //
@@ -73,6 +72,10 @@ app.use(
       error = new HttpError(error); // next(404)
     }
     console.error(error);
+
+    // if (error === 500) {
+    //   error = new HttpError(400, error.message);
+    // }
 
     if (error instanceof HttpError) {
       res.sendHttpError(error);

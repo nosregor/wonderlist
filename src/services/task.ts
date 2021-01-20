@@ -1,117 +1,102 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { HttpError } from '../middlewares/error';
-import { IList } from '../models/list';
-import { ITask } from '../models/task';
-import ListRepository from '../repositories/list';
+import { IList, List } from '../models/list';
+import { ITask, Task } from '../models/task';
+import ListService from '../services/list';
 import TaskRepository from '../repositories/task';
 
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function createTask(
-  req: any,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const list: IList = await ListRepository.getListById(
-      req.params.listId,
-    );
-    if (!list) {
-      next(new HttpError(404, `List ${req.params.listId} not found`));
-    }
+export interface ITaskService {
+  /**
+   * @param { Object } body
+   * @returns { Promise<ITask }
+   * @interface ITaskService
+   */
+  createTask(listId: string, body: ITask): Promise<IList>;
 
-    const body: ITask = req.body;
-    const task = await TaskRepository.createTask({ list, body });
+  /**
+   * @param { string } listId
+   * @param { string } taskId
+   * @returns { Promise<ITask> }
+   * @interface ITaskService
+   */
+  getTaskById(listId: string, taskId: string): Promise<ITask[]>;
 
-    res.status(200).json(task);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
+  /**
+   * @param { string } listId
+   * @param { string } taskId
+   * @param { ITask } body
+   * @returns { Promise<IList> }
+   * @interface ITaskService
+   */
+  updateTaskById(
+    listId: string,
+    taskId: string,
+    body: ITask,
+  ): Promise<IList>;
+
+  /**
+   * @param { string } taskId
+   * @param { string } user
+   * @returns { Promise<IList> }
+   * @interface ITaskService
+   */
+  deleteTaskById(taskId: string, user: string): Promise<IList>;
 }
 
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function getTaskById(
-  req: any,
-  res: any,
-  next: NextFunction,
-): Promise<void> {
-  const { listId, taskId } = req.params;
-  try {
-    const task = await TaskRepository.getTaskFromList({
-      listId,
+const TaskService: ITaskService = {
+  async createTask(listId, body): Promise<IList> {
+    const list: IList = await List.findById(listId);
+
+    const task = await Task.create(body);
+    await list.tasks.push(task);
+    const savedList = await list.save();
+
+    return List.findById(savedList._id).populate('tasks');
+  },
+
+  async getTaskById(listId, taskId): Promise<ITask[]> {
+    const list: IList = await List.findById({
+      _id: listId,
+    }).populate('tasks');
+
+    const task = list.tasks.filter(
+      (task) => String(task._id) === taskId,
+    );
+
+    return task;
+  },
+
+  async updateTaskById(listId, taskId, body): Promise<IList> {
+    const task = await Task.findByIdAndUpdate(
       taskId,
-    });
-
-    return res.send(task);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
-
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function updateTaskById(
-  req: any,
-  res: any,
-  next: NextFunction,
-): Promise<void> {
-  const { listId, taskId } = req.params;
-  const { body } = req.body;
-
-  try {
-    const list = await TaskRepository.updateTaskFromList({
-      listId,
-      taskId,
-      body,
-    });
-    return res.send(list);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
-
-/**
- * @param { Request } req
- * @param { Respons } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-async function deleteTaskById(
-  req: any,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const list: IList = await ListRepository.getListById(
-      req.params.listId,
+      {
+        $set: body,
+      },
+      { new: true },
     );
-    if (!list) {
-      next(new HttpError(404, `List ${req.params.listId} not found`));
-    }
+    const list: IList = await List.findById({
+      _id: listId,
+      'tasks._id': taskId,
+    }).populate('tasks');
 
-    const task = await TaskRepository.deleteTaskFromList(
-      req.params.taskId,
-      req.user,
-    );
+    return list;
+  },
 
-    res.status(200).json(task);
-  } catch (error) {
-    next(new HttpError(error.message.status, error.message));
-  }
-}
+  async deleteTaskById(taskId, userId): Promise<IList> {
+    const filter = { user: userId };
+    const update = { $pull: { tasks: taskId } };
+    const options = { new: true };
 
-export { createTask, getTaskById, updateTaskById, deleteTaskById };
+    const list: IList = await List.findOneAndUpdate(
+      filter,
+      // @ts-ignore: Unreachable code error
+      update,
+      options,
+    ).populate('user');
+
+    return list;
+  },
+};
+
+export default TaskService;

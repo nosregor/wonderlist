@@ -14,7 +14,7 @@
     "watch-ts": "tsc -w",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "prettier-format": "prettier --config .prettierrc.js 'src/**/*.ts' --write",
-    "test": "NODE_ENV=test jest --config ./jest.config.js -runInBand --verbose --silent --forceExit",
+    "test": "NODE_ENV=test jest --config ./jest.config.js -runInBand --verbose --forceExit",
     "test:watch": "NODE_ENV=test jest --watch",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
@@ -65,6 +65,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "express-session": "^1.17.1",
     "http-status-codes": "^2.1.4",
     "jest-environment-node": "^26.6.2",

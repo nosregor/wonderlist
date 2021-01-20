@@ -1,26 +1,32 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { IUser } from '../models/user';
+import { IUser, User } from '../models/user';
 import { HttpError } from '../middlewares/error';
-import UserRepository from '../repositories/user';
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-const signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  console.log(req.body);
-  const body: IUser = req.body;
-  try {
-    const user = await UserRepository.createUser(body);
-    console.log(user);
+export interface IAuthService {
+  /**
+   * @param { IUser } body
+   * @returns { Promise<string> }
+   * @interface IAuthService
+   */
+  signup(body: IUser): Promise<string>;
+
+  /**
+   * @param { IUser } body
+   * @returns { Promise<string> }
+   * @interface IAuthService
+   */
+  login(body: IUser): Promise<string>;
+}
+
+const AuthService: IAuthService = {
+  async signup(body: IUser): Promise<string> {
+    const user = await User.create({
+      email: body.email,
+      password: body.password,
+    });
+
     const token: string = jwt.sign(
       { user: { _id: user._id } },
       'TOP_SECRET',
@@ -29,79 +35,29 @@ const signup = async (
       },
     );
 
-    res.json({
-      status: 200,
-      logged: true,
-      token: token,
-      message: 'Sign in successful',
-    });
-  } catch (error) {
-    if (error.code === 500) {
-      return next(new HttpError(error.message.status, error.message));
-    }
-    res.status(400).json({ status: 400, message: error.message });
-  }
-};
+    return token;
+  },
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const user = await UserRepository.getUser(req.body);
+  async login(body): Promise<string> {
+    const { email, password } = body;
+
+    const user: IUser = await User.findOne({
+      email: body.email,
+    });
+
+    const isValidPassword: boolean =
+      user && (await user.isValidPassword(body.password));
+
+    if (!isValidPassword) {
+      throw new Error('Invalid password or email');
+    }
+
     const token: string = jwt.sign(
       { user: { _id: user._id } },
       'TOP_SECRET',
     );
-
-    res.json({
-      status: 200,
-      logged: true,
-      token: token,
-      message: 'Sign in successful',
-    });
-  } catch (error) {
-    if (error.code === 500) {
-      return next(new HttpError(error.message.status, error.message));
-    }
-    res.status(400).json({ status: 400, message: error.message });
-  }
+    return token;
+  },
 };
 
-/**
- * @param { Request } req
- * @param { Response } res
- * @param { NextFunction } next
- * @returns { Promise<void> }
- */
-const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  if (!req.user) {
-    res.send({
-      status: 401,
-      logged: false,
-      message: 'You are not logged in!',
-    });
-  }
-  if (req.user) {
-    delete req.headers.authorization; // destroy session on server side
-    req.logout();
-    res.send({
-      status: 200,
-      logged: false,
-      message: 'Successfully logged out!',
-    });
-  }
-};
-
-export { login, logout, signup };
+export default AuthService;
