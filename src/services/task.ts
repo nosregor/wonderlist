@@ -4,7 +4,6 @@ import { HttpError } from '../middlewares/error';
 import { IList, List } from '../models/list';
 import { ITask, Task } from '../models/task';
 import ListService from '../services/list';
-import TaskRepository from '../repositories/task';
 
 export interface ITaskService {
   /**
