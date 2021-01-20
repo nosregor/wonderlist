@@ -26,7 +26,6 @@ function getUsers() {
     });
 }
 exports.getUsers = getUsers;
-// @ts-ignore: Unreachable code error
 function createUser(body) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -41,7 +40,6 @@ function createUser(body) {
                 throw new Error('This email already exists');
             }
             const saved = yield user.save();
-            // @ts-ignore: Unreachable code error
             return saved;
         }
         catch (error) {

@@ -14,7 +14,6 @@ async function createTask(
     let list: IList = await listRepository.getListById(
       req.params.listId,
     );
-    console.log(list);
     if (!list) {
       next(new HttpError(404, `List ${req.params.listId} not found`));
     }

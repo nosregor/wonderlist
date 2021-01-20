@@ -14,7 +14,6 @@ const list_1 = require("../models/list");
 function createList(body) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // @ts-ignore: Unreachable code error
             return list_1.List.create(body);
         }
         catch (error) {

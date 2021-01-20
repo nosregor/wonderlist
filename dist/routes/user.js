@@ -42,7 +42,7 @@ router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 }));
 // SIGNUP
 router.post('/signup', passport_1.default.authenticate('signup', { session: false }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json({
+    res.status(200).json({
         message: 'Signup successful',
         user: req.user,
     });

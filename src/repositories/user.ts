@@ -12,7 +12,6 @@ async function getUsers(): Promise<IUser[]> {
   }
 }
 
-// @ts-ignore: Unreachable code error
 async function createUser(body: any): Promise<IUser> {
   try {
     const user = new User({
@@ -29,7 +28,6 @@ async function createUser(body: any): Promise<IUser> {
     }
 
     const saved = await user.save();
-    // @ts-ignore: Unreachable code error
 
     return saved;
   } catch (error) {

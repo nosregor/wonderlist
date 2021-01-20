@@ -35,8 +35,6 @@ export const closeDatabase = async () => {
 export const clearDatabase = async () => {
   const collections = mongoose.connection.collections;
 
-  console.log(Object.keys(collections).length);
-
   if (mongoose.connection.readyState !== 0) {
     const promises = Object.keys(collections).map((collection) =>
       mongoose.connection.collection(collection).deleteMany({}),

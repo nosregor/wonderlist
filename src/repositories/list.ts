@@ -2,7 +2,6 @@ import { IList, List } from '../models/list';
 
 async function createList(body: any): Promise<IList> {
   try {
-    // @ts-ignore: Unreachable code error
     return List.create(body);
   } catch (error) {
     throw new Error(error.message);
