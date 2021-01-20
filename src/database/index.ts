@@ -16,7 +16,7 @@ const connectOptions: ConnectionOptions = {
   poolSize: 5,
 };
 
-const MONGO_URI: string = `${config.database.MONGO_URI}`;
+const MONGO_URI = `${config.database.MONGO_URI}`;
 
 export const connectDB = async () => {
   // handlers;

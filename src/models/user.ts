@@ -1,6 +1,5 @@
 import { model, Schema, Model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
-import * as connections from '../database/index';
 
 /**
  * @export

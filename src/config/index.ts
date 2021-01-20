@@ -27,7 +27,7 @@ function getStringEnv(
 }
 
 const NODE_ENV: string = getStringEnv('NODE_ENV', 'development');
-const NAME: string = 'wonderlist';
+const NAME = 'wonderlist';
 const PORT: string | number = getStringEnv('PORT', '3000');
 const SECRET = getStringEnv('SECRET', 'TOP_SECRET');
 const MONGO_URI = getStringEnv(

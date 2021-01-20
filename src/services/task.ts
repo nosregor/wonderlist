@@ -18,7 +18,7 @@ async function createTask(
   next: NextFunction,
 ): Promise<void> {
   try {
-    let list: IList = await ListRepository.getListById(
+    const list: IList = await ListRepository.getListById(
       req.params.listId,
     );
     if (!list) {
@@ -96,7 +96,7 @@ async function deleteTaskById(
   next: NextFunction,
 ): Promise<void> {
   try {
-    let list: IList = await ListRepository.getListById(
+    const list: IList = await ListRepository.getListById(
       req.params.listId,
     );
     if (!list) {
