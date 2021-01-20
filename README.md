@@ -84,5 +84,5 @@ Format your code in watch mode, waiting for file changes.
 
 ### Deployment
 
-- Deploying Typescript Node.js applications to Heroku (with static files)
 - https://developer.mongodb.com/how-to/use-atlas-on-heroku
+- https://medium.com/developer-rants/deploying-typescript-node-js-applications-to-heroku-81dd75424ce0
