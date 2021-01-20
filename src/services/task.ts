@@ -1,24 +1,32 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { HttpError } from '../middlewares/error';
 import { IList } from '../models/list';
-import * as listRepository from '../repositories/list';
-import * as taskRepository from '../repositories/task';
+import { ITask } from '../models/task';
+import ListRepository from '../repositories/list';
+import TaskRepository from '../repositories/task';
 
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 async function createTask(
   req: any,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const userId: string = req.user._id;
   try {
-    let list: IList = await listRepository.getListById(
+    let list: IList = await ListRepository.getListById(
       req.params.listId,
     );
     if (!list) {
       next(new HttpError(404, `List ${req.params.listId} not found`));
     }
 
-    const task = await taskRepository.createTask(list, req.body);
+    const body: ITask = req.body;
+    const task = await TaskRepository.createTask({ list, body });
 
     res.status(200).json(task);
   } catch (error) {
@@ -26,17 +34,23 @@ async function createTask(
   }
 }
 
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 async function getTaskById(
   req: any,
   res: any,
   next: NextFunction,
 ): Promise<void> {
-  const userId: string = req.user._id;
+  const { listId, taskId } = req.params;
   try {
-    const task = await taskRepository.getTaskFromList(
-      req.params.listId,
-      req.params.taskId,
-    );
+    const task = await TaskRepository.getTaskFromList({
+      listId,
+      taskId,
+    });
 
     return res.send(task);
   } catch (error) {
@@ -44,39 +58,52 @@ async function getTaskById(
   }
 }
 
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 async function updateTaskById(
   req: any,
   res: any,
   next: NextFunction,
 ): Promise<void> {
-  const userId: string = req.user._id;
+  const { listId, taskId } = req.params;
+  const { body } = req.body;
+
   try {
-    const list = await taskRepository.updateTaskFromList(
-      req.params.listId,
-      req.params.taskId,
-      req.body,
-    );
+    const list = await TaskRepository.updateTaskFromList({
+      listId,
+      taskId,
+      body,
+    });
     return res.send(list);
   } catch (error) {
     next(new HttpError(error.message.status, error.message));
   }
 }
 
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 async function deleteTaskById(
   req: any,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const userId: string = req.user._id;
   try {
-    let list: IList = await listRepository.getListById(
+    let list: IList = await ListRepository.getListById(
       req.params.listId,
     );
     if (!list) {
       next(new HttpError(404, `List ${req.params.listId} not found`));
     }
 
-    const task = await taskRepository.deleteTaskFromList(
+    const task = await TaskRepository.deleteTaskFromList(
       req.params.taskId,
       req.user,
     );

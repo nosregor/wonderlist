@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -27,15 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteListById = exports.updateListById = exports.getListById = exports.getListsByUserId = exports.createList = void 0;
 const error_1 = require("../middlewares/error");
-const listRepository = __importStar(require("../repositories/list"));
+const list_1 = __importDefault(require("../repositories/list"));
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function getListsByUserId(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = req.user._id;
         try {
-            const lists = yield listRepository.getListsByUserId(userId);
+            const lists = yield list_1.default.getListsByUserId(userId);
             res.status(200).json(lists);
         }
         catch (error) {
@@ -44,10 +34,16 @@ function getListsByUserId(req, res, next) {
     });
 }
 exports.getListsByUserId = getListsByUserId;
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function createList(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const list = yield listRepository.createList(req.body);
+            const list = yield list_1.default.createList(req.body);
             res.status(200).json(list);
         }
         catch (error) {
@@ -56,10 +52,16 @@ function createList(req, res, next) {
     });
 }
 exports.createList = createList;
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function getListById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const list = yield listRepository.getListById(req.body);
+            const list = yield list_1.default.getListById(req.params.listId);
             res.status(200).json(list);
         }
         catch (error) {
@@ -68,13 +70,20 @@ function getListById(req, res, next) {
     });
 }
 exports.getListById = getListById;
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function updateListById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
+        const props = {
+            body: req.body,
+            listId: req.params.listId,
+        };
         try {
-            const list = yield listRepository.updateListById({
-                body: req.body,
-                listId: req.params.listId,
-            });
+            const list = yield list_1.default.updateListById(props);
             res.status(200).json(list);
         }
         catch (error) {
@@ -83,10 +92,16 @@ function updateListById(req, res, next) {
     });
 }
 exports.updateListById = updateListById;
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function deleteListById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const list = yield listRepository.deleteListById(req.params.listId);
+            const list = yield list_1.default.deleteListById(req.params.listId);
             res.status(200).json(list);
         }
         catch (error) {

@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -27,21 +8,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTaskById = exports.updateTaskById = exports.getTaskById = exports.createTask = void 0;
 const error_1 = require("../middlewares/error");
-const listRepository = __importStar(require("../repositories/list"));
-const taskRepository = __importStar(require("../repositories/task"));
+const list_1 = __importDefault(require("../repositories/list"));
+const task_1 = __importDefault(require("../repositories/task"));
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function createTask(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.user._id;
         try {
-            let list = yield listRepository.getListById(req.params.listId);
-            console.log(list);
+            let list = yield list_1.default.getListById(req.params.listId);
             if (!list) {
                 next(new error_1.HttpError(404, `List ${req.params.listId} not found`));
             }
-            const task = yield taskRepository.createTask(list, req.body);
+            const body = req.body;
+            const task = yield task_1.default.createTask({ list, body });
             res.status(200).json(task);
         }
         catch (error) {
@@ -50,11 +39,20 @@ function createTask(req, res, next) {
     });
 }
 exports.createTask = createTask;
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function getTaskById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.user._id;
+        const { listId, taskId } = req.params;
         try {
-            const task = yield taskRepository.getTaskFromList(req.params.listId, req.params.taskId);
+            const task = yield task_1.default.getTaskFromList({
+                listId,
+                taskId,
+            });
             return res.send(task);
         }
         catch (error) {
@@ -63,11 +61,22 @@ function getTaskById(req, res, next) {
     });
 }
 exports.getTaskById = getTaskById;
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function updateTaskById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.user._id;
+        const { listId, taskId } = req.params;
+        const { body } = req.body;
         try {
-            const list = yield taskRepository.updateTaskFromList(req.params.listId, req.params.taskId, req.body);
+            const list = yield task_1.default.updateTaskFromList({
+                listId,
+                taskId,
+                body,
+            });
             return res.send(list);
         }
         catch (error) {
@@ -76,15 +85,20 @@ function updateTaskById(req, res, next) {
     });
 }
 exports.updateTaskById = updateTaskById;
+/**
+ * @param { Request } req
+ * @param { Respons } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 function deleteTaskById(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.user._id;
         try {
-            let list = yield listRepository.getListById(req.params.listId);
+            let list = yield list_1.default.getListById(req.params.listId);
             if (!list) {
                 next(new error_1.HttpError(404, `List ${req.params.listId} not found`));
             }
-            const task = yield taskRepository.deleteTaskFromList(req.params.taskId, req.user);
+            const task = yield task_1.default.deleteTaskFromList(req.params.taskId, req.user);
             res.status(200).json(task);
         }
         catch (error) {

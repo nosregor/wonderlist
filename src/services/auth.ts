@@ -1,16 +1,26 @@
-import * as userRepository from '../repositories/user';
-import jwt from 'jsonwebtoken'; // used to create, sign, and verify tokens
-import { HttpError } from '../middlewares/error';
 import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
+import { IUser } from '../models/user';
+import { HttpError } from '../middlewares/error';
+import UserRepository from '../repositories/user';
+
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
 const signup = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
+  console.log(req.body);
+  const body: IUser = req.body;
   try {
-    const user = await userRepository.createUser(req.body);
-
+    const user = await UserRepository.createUser(body);
+    console.log(user);
     const token: string = jwt.sign(
       { user: { _id: user._id } },
       'TOP_SECRET',
@@ -33,14 +43,19 @@ const signup = async (
   }
 };
 
-async function login(
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
+const login = async (
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> {
+): Promise<void> => {
   try {
-    const user = await userRepository.getUser(req.body);
-
+    const user = await UserRepository.getUser(req.body);
     const token: string = jwt.sign(
       { user: { _id: user._id } },
       'TOP_SECRET',
@@ -58,6 +73,35 @@ async function login(
     }
     res.status(400).json({ status: 400, message: error.message });
   }
-}
+};
 
-export { login, signup };
+/**
+ * @param { Request } req
+ * @param { Response } res
+ * @param { NextFunction } next
+ * @returns { Promise<void> }
+ */
+const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  if (!req.user) {
+    res.send({
+      status: 401,
+      logged: false,
+      message: 'You are not logged in!',
+    });
+  }
+  if (req.user) {
+    delete req.headers.authorization; // destroy session on server side
+    req.logout();
+    res.send({
+      status: 200,
+      logged: false,
+      message: 'Successfully logged out!',
+    });
+  }
+};
+
+export { login, logout, signup };

@@ -9,10 +9,10 @@ import * as connections from '../database/index';
  */
 export interface IUser extends Document {
   // porperties
-  username: string;
+  username?: string;
   email: string;
   password: string;
-  admin: boolean;
+  admin?: boolean;
   // methods
   isValidPassword: (password: string) => Promise<boolean>;
 }

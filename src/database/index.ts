@@ -1,9 +1,7 @@
 import {
   connect,
   connection,
-  Connection,
   ConnectionOptions,
-  createConnection,
   Mongoose,
 } from 'mongoose';
 

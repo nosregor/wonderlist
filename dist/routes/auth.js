@@ -30,12 +30,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const authService = __importStar(require("../services/auth"));
 const express_1 = require("express");
+const passportJwt_1 = require("../middlewares/passportJwt");
 const router = express_1.Router();
 router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     authService.signup(req, res, next);
 }));
 router.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
     authService.login(req, res, next);
+}));
+router.post('/logout', passportJwt_1.isAuthenticated, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    authService.logout(req, res, next);
 }));
 exports.default = router;
 //# sourceMappingURL=auth.js.map

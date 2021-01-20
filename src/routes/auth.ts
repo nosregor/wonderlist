@@ -1,6 +1,6 @@
 import * as authService from '../services/auth';
 import { NextFunction, Request, Response, Router } from 'express';
-import { check } from 'prettier';
+import { isAuthenticated } from '../middlewares/passportJwt';
 
 const router = Router();
 
@@ -14,7 +14,16 @@ router.post(
 router.post(
   '/login',
   async (req: any, res: Response, next: NextFunction) => {
+    console.log(req.body);
     authService.login(req, res, next);
+  },
+);
+
+router.post(
+  '/logout',
+  isAuthenticated,
+  async (req: any, res: Response, next: NextFunction) => {
+    authService.logout(req, res, next);
   },
 );
 

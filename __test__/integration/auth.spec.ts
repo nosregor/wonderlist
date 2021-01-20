@@ -19,7 +19,7 @@ afterAll(async () => await dbHandler.closeDatabase());
 
 describe('Authentication', () => {
   it('should be able to signup', async () => {
-    const response = await request.post('/api/auth/signup').send({
+    const response = await request.post('/auth/signup').send({
       email: 'useremail@email.com',
       password: '123123',
     });
@@ -28,7 +28,7 @@ describe('Authentication', () => {
   });
 
   it('should be able to login', async () => {
-    const response = await request.post('/api/auth/login').send({
+    const response = await request.post('/auth/login').send({
       email: 'useremail@email.com',
       password: '123123',
     });
@@ -37,7 +37,7 @@ describe('Authentication', () => {
   });
 
   it('should not be able to login with invalid password', async () => {
-    const response = await request.post('/api/auth/login').send({
+    const response = await request.post('/auth/login').send({
       email: 'useremail@email.com',
       password: '999999',
     });

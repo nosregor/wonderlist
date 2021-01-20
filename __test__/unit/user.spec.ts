@@ -1,6 +1,7 @@
+import bcrypt from 'bcrypt';
+
 import * as dbHandler from '../db-handler';
 import { User } from '../../src/models/user';
-import * as userService from '../../src/services/user';
 
 /**
  * Connect to a new in-memory database before running any tests.
@@ -15,13 +16,19 @@ afterEach(async () => await dbHandler.clearDatabase());
  */
 afterAll(async () => await dbHandler.closeDatabase());
 
-describe('...', () => {
-  it('...', async () => {
+describe('User model', () => {
+  it('should create and save user`s password as a hash', async () => {
     const user = await User.create({
       email: 'test',
       password: 'test',
     });
-    const count = await User.countDocuments();
-    expect(count).toEqual(1);
+    const salt: string = await bcrypt.genSalt(10);
+    const hash: string = await bcrypt.hash(user.password, salt);
+
+    const compare = await bcrypt.compare(hash, user.password);
+
+    const password = await user.isValidPassword(user.password);
+
+    expect(password).toEqual(compare);
   });
 });
