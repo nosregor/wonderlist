@@ -15,7 +15,7 @@ beforeAll(async () => await dbHandler.connect());
 afterAll(async () => await dbHandler.closeDatabase());
 
 describe('Authentication', () => {
-  it('should be able to signup', async () => {
+  it('should be able to create a user and successfully signup', async () => {
     const response = await request.post('/auth/signup').send({
       email: 'useremail@email.com',
       password: '123123',
@@ -40,7 +40,6 @@ describe('Authentication', () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.name).toBe('');
-    // expect(response.text).toContain('Invalid password or email');
+    expect(response.text).toContain('Invalid password or email');
   });
 });
