@@ -19,7 +19,7 @@ const connectOptions: ConnectionOptions = {
 
 const MONGO_URI = `${config.database.MONGO_URI}`;
 
-export const connectDB = async () => {
+export const connectDB = async (): Promise<Mongoose> => {
   // handlers;
   connection.on('connecting', () => {
     console.log('MongoDB :: connecting');
@@ -30,7 +30,7 @@ export const connectDB = async () => {
   });
 
   connection.on('connected', () => {
-    console.log(`MongoDB :: connecting to ${MONGO_URI}`);
+    console.log(`MongoDB :: connected to ${MONGO_URI}`);
   });
 
   connection.on('open', () => {
@@ -53,9 +53,5 @@ export const connectDB = async () => {
     console.log('MongoDB :: reconnecting...%d');
   });
 
-  try {
-    const db: Mongoose = await connect(MONGO_URI, connectOptions);
-  } catch (error) {
-    throw error;
-  }
+  return await connect(MONGO_URI, connectOptions);
 };

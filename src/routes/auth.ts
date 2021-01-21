@@ -9,19 +9,15 @@ const router = Router();
 router.post(
   '/signup',
   async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const body: IUser = req.body;
-      const token = await AuthService.signup(body);
+    const body: IUser = req.body;
+    const token = await AuthService.signup(body);
 
-      res.status(201).json({
-        status: 201,
-        logged: true,
-        token: token,
-        message: 'Sign in successful',
-      });
-    } catch (error) {
-      return next(error);
-    }
+    res.status(201).json({
+      status: 201,
+      logged: true,
+      token: token,
+      message: 'Sign in successful',
+    });
   },
 );
 
@@ -29,9 +25,9 @@ router.post(
   '/login',
   async (req: any, res: Response, next: NextFunction) => {
     const body: IUser = req.body;
-    console.log({ body });
     const token = await AuthService.login(body);
-    console.log({ token });
+
+    // TODO: error handling, do I throw error if token is undefined?
 
     res.json({
       status: 200,

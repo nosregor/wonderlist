@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch API Service",
-            "program": "${workspaceFolder}/src/server.ts",
+            "program": "${workspaceFolder}/src/index.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "sourceMaps": true,

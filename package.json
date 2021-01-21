@@ -8,9 +8,9 @@
   },
   "scripts": {
     "postinstall": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/index.js",
     "start:dev": "nodemon",
-    "watch-node": "nodemon dist/server.js",
+    "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "prettier-format": "prettier --config .prettierrc.js 'src/**/*.ts' --write",

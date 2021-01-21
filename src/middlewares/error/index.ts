@@ -6,24 +6,31 @@ import * as http from 'http-status-codes';
  * @extends {Error}
  */
 export class HttpError extends Error {
-  status: number;
+  name: string;
   message: string;
-  name: 'HttpError';
+  status: number;
 
   /**
    * Creates an instance of HttpError
    * @params {number} [status]
-   * @params {string} {message}
+   * @params {string} [message]
    * @memberof HttpError
    */
   constructor(status?: number, message?: string) {
     super(message);
+    console.log({ message });
+    console.log({ status });
 
-    Error.captureStackTrace(this, this.constructor);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, HttpError);
+    }
+
     this.status = status || 500;
 
-    // @ts-ignore: Unreachable code error
-    this.name = this.name;
-    this.message = message || http.StatusCodes[this.status];
+    this.name = http.StatusCodes[this.status] || 'Error';
+    console.log(http.StatusCodes[this.status], 'HELLO');
+
+    this.message =
+      message || http.StatusCodes[this.status] || 'Error';
   }
 }

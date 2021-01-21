@@ -86,3 +86,7 @@ Format your code in watch mode, waiting for file changes.
 
 - https://developer.mongodb.com/how-to/use-atlas-on-heroku
 - https://medium.com/developer-rants/deploying-typescript-node-js-applications-to-heroku-81dd75424ce0
+
+### Typescript
+
+- https://medium.com/swlh/typescript-with-mongoose-and-node-express-24073d51d2ee

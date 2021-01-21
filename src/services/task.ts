@@ -1,9 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-
-import { HttpError } from '../middlewares/error';
 import { IList, List } from '../models/list';
 import { ITask, Task } from '../models/task';
-import ListService from '../services/list';
 
 export interface ITaskService {
   /**

@@ -1,9 +1,6 @@
 import * as dbHandler from '../db-handler';
-import { User } from '../../src/models/user';
-import * as userService from '../../src/services/user';
 import supertest from 'supertest';
-import { app } from '../../src/app';
-import mongoose from 'mongoose';
+import app from '../../src/server';
 
 const request = supertest(app);
 
@@ -42,7 +39,8 @@ describe('Authentication', () => {
       password: '999999',
     });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(401);
+    expect(response.name).toBe('');
     // expect(response.text).toContain('Invalid password or email');
   });
 });

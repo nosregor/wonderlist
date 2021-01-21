@@ -2,6 +2,7 @@
 // import { NextFunction, Request, Response } from 'express';
 // import * as http from 'http-status-codes';
 // import { HttpError } from './error';
+// import config from '../config';
 
 // interface RequestWithUser extends Request {
 //   user: object | string;
@@ -14,7 +15,7 @@
 //  */
 // const isValidToken = (token) => {
 //   try {
-//     jwt.verify(token, process.env.JWT_SECRET_OR_KEY);
+//     jwt.verify(token, config.secret);
 //     return true;
 //   } catch (error) {
 //     // error

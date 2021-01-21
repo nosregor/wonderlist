@@ -2,8 +2,6 @@ import { model, Schema, Model, Document } from 'mongoose';
 import { IList } from './list';
 import { IUser } from './user';
 
-import * as connections from '../database/index';
-
 /**
  * @export
  * @interface ITask

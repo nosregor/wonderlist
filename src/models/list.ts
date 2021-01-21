@@ -3,7 +3,7 @@ import { ITask, Task } from './task';
 
 import { IUser } from './user';
 
-import * as connections from '../database/index';
+import * as connections from '../database';
 
 /**
  * @export
