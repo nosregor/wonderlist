@@ -6,19 +6,22 @@ import 'express-async-errors';
 
 const router = Router();
 
-// TODO: add async errors, to deal with unhandled errors
 router.post(
   '/signup',
   async (req: any, res: Response, next: NextFunction) => {
-    const body: IUser = req.body;
-    const token = await AuthService.signup(body);
+    try {
+      const body: IUser = req.body;
+      const token = await AuthService.signup(body);
 
-    res.status(201).json({
-      status: 201,
-      logged: true,
-      token: token,
-      message: 'Sign in successful',
-    });
+      res.status(201).json({
+        status: 201,
+        logged: true,
+        token: token,
+        message: 'Sign in successful',
+      });
+    } catch (error) {
+      return next(error);
+    }
   },
 );
 

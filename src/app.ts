@@ -1,8 +1,14 @@
-import express, { NextFunction, Response, Request } from 'express';
+import express, {
+  Application,
+  NextFunction,
+  Response,
+  Request,
+} from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import * as http from 'http-status-codes';
 
+import config from './config/index';
 import routes from './routes';
 import { sendHttpErrorModule } from './middlewares/error/sendHttpError';
 import { HttpError } from './middlewares/error';
@@ -11,15 +17,15 @@ const app = express();
 // * Application-Level Middleware * //
 
 // Third-Party Middleware
+// The magic package that prevents frontend developers going nuts
+// Alternate description:
+// Enable Cross Origin Resource Sharing to all origins by default
 app.use(cors());
 app.use(logger('dev'));
 
-// express middleware
+// Middleware that transforms the raw string of req.body into json
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// providing a Connect/Express middleware that can be used to enable CORS with various options
-app.use(cors());
 
 // custom errors
 app.use(sendHttpErrorModule);
@@ -41,12 +47,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// * Routes * //
-app.use('/', routes.health);
-app.use('/auth', routes.auth);
-app.use('/users', routes.user);
-app.use('/lists', routes.list);
-app.use('/docs', routes.docs);
+// * Load Routes * //
+app.use('/', routes());
 
 /**
  * @description No results returned mean the object is not found

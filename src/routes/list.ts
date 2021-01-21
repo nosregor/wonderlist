@@ -6,6 +6,7 @@ import taskRouter from './task';
 import { isAuthenticated } from '../middlewares/passportJwt';
 
 const router = Router();
+
 router.use('/:listId/tasks', taskRouter);
 
 router
