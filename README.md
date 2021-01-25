@@ -10,7 +10,6 @@ The purpose of this repository is to show a good end-to-end project setup and wo
 
 This project comes with a complete REST API to handle Authentication and CRUD features on Users as well as handle Lists and their corresponding Tasks.
 
-
 ### Features
 
 - TypeScript v4
