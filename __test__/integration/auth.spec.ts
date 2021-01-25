@@ -1,5 +1,5 @@
 import * as dbHandler from '../db-handler';
-import supertest from 'supertest';
+import * as supertest from 'supertest';
 import app from '../../src/server';
 
 const request = supertest(app);

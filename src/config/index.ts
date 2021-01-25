@@ -19,6 +19,9 @@ function getStringEnv(
 ): string {
   const val = process.env[variable];
   if (!val) {
+    if (defaultValue) {
+      return defaultValue;
+    }
     throw new Error(
       `${variable} not found. Set ${variable} environment variable.`,
     );
@@ -53,17 +56,8 @@ const production: IConfig = {
   secret: SECRET,
 };
 
-const test: IConfig = {
-  name: NAME,
-  port: PORT,
-  database: {
-    MONGO_URI: MONGO_URI,
-  },
-  secret: SECRET,
-};
-
 const config: {
   [name: string]: IConfig;
-} = { test, development, production };
+} = { development, production };
 
 export default config[NODE_ENV];

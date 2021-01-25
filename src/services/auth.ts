@@ -49,7 +49,7 @@ const AuthService: IAuthService = {
       user && (await user.isValidPassword(body.password));
 
     if (!isValidPassword) {
-      throw new HttpError(401, 'Invalid password or email');
+      throw new Error('Invalid password or email');
     }
 
     const token: string = jwt.sign(

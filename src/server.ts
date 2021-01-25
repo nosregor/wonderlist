@@ -1,11 +1,11 @@
-import express, { Application } from 'express';
+import express from 'express';
 import * as Middleware from './middlewares/express';
 import * as Routes from './routes/index';
 
 /**
  * @constructs { express.Application }
  */
-const app: Application = express();
+const app: express.Application = express();
 
 /**
  * @constructs express.Application Middleware

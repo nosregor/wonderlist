@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 import * as dbHandler from '../db-handler';
 import { User } from '../../src/models/user';

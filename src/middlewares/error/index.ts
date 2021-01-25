@@ -18,8 +18,6 @@ export class HttpError extends Error {
    */
   constructor(status?: number, message?: string) {
     super(message);
-    console.log({ message });
-    console.log({ status });
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, HttpError);

@@ -1,5 +1,5 @@
-import { Application, Router } from 'express';
-import swaggerUi from 'swagger-ui-express';
+import express from 'express';
+import * as swaggerUi from 'swagger-ui-express';
 import * as http from 'http-status-codes';
 
 import * as swaggerDocument from '../swagger.json';
@@ -13,8 +13,8 @@ import health from './health';
  * @param app
  * @returns
  */
-export function init(app: Application): void {
-  const router: Router = Router();
+export function init(app: express.Application): void {
+  const router: express.Router = express.Router();
 
   /**
    * @description Forwards any requests to the /:router URI
