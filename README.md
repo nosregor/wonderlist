@@ -4,22 +4,22 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)](https://www.typescriptlang.org)
 
-# 🧰 Simple TypeScript Starter | 2020
+## 🧰 Simple TypeScript Starter | 2021
 
-> We talk about a lot of **advanced Node.js and TypeScript** concepts on [the blog](https://khalilstemmler.com), particularly focused around Domain-Driven Design and large-scale enterprise application patterns. However, I received a few emails from readers that were interested in seeing what a basic TypeScript starter project looks like. So I've put together just that.
+The purpose of this repository is to show a good end-to-end project setup and workflow for writing **Mongoose, Node.js, Express code in TypeScript** complete with middleware, models, testing, routes and types.   
+
+This project comes with a complete REST API to handle Authentication and CRUD features on Users as well as handle Lists and their corresponding Tasks.
+
 
 ### Features
 
 - TypeScript v4
 - Testing with Jest
-- Linting with Eslint and Prettier
+- Linting with Eslint, Prettier and TypeScript
 - Pre-commit hooks with Husky
 - VS Code debugger scripts
 - Local development with Nodemon
 
-The main purpose of this repository is to show a good end-to-end project setup and workflow for writing a Node.js Express Mongoose code in TypeScript complete with middleware, models, routes and types.
-
-This project comes with a complete REST API to handle Authentication and CRUD features on Users as well as handle Lists and their corresponding Tasks.
 
 ### Scripts
 
@@ -51,22 +51,24 @@ Format your code.
 
 Format your code in watch mode, waiting for file changes.
 
-### Ressources
+
+
+#### Ressources
 
 - Using ESLint and Prettier in a TypeScript Project: https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project
 
-### Authentication
+#### Authentication
 
 - https://levelup.gitconnected.com/everything-you-need-to-know-about-the-passport-local-passport-js-strategy-633bbab6195
 - https://medium.com/swlh/everything-you-need-to-know-about-the-passport-jwt-passport-js-strategy-8b69f39014b0
 - https://levelup.gitconnected.com/deriving-signing-and-verifying-a-jwt-json-web-token-with-node-js-f3d0d12b1fc9 -http://toon.io/understanding-passportjs-authentication-flow/
 - https://mannhowie.com/auth
 
-### Update subdocuments Mongoose
+#### Update subdocuments Mongoose
 
 - https://www.codegrepper.com/code-examples/javascript/mongoose+update+data+subdocument
 
-### Mongoose, Testing, Jest
+#### Mongoose, Testing, Jest
 
 - https://developer.aliyun.com/mirror/npm/package/mamodom-mongodb-memory-server
 - https://dev.to/dyarleniber/parallel-tests-in-node-js-with-jest-and-mongodb-without-mocking-4jj2
@@ -78,15 +80,16 @@ Format your code in watch mode, waiting for file changes.
 - https://zellwk.com/blog/jest-and-mongoose/
 - https://dev.to/ziishaned/open-multiple-mongodb-connection-in-express-js-app-36be
 
-### Seeding
+#### Seeding
 
 - https://dev.to/ziishaned/open-multiple-mongodb-connection-in-express-js-app-36be
 
-### Deployment
+#### Deployment
 
 - https://developer.mongodb.com/how-to/use-atlas-on-heroku
 - https://medium.com/developer-rants/deploying-typescript-node-js-applications-to-heroku-81dd75424ce0
 
-### Typescript
+#### Advanced Node.js and TypeScript
 
 - https://medium.com/swlh/typescript-with-mongoose-and-node-express-24073d51d2ee
+- https://khalilstemmler.com
