@@ -26,7 +26,6 @@ export class HttpError extends Error {
     this.status = status || 500;
 
     this.name = http.StatusCodes[this.status] || 'Error';
-    console.log(http.StatusCodes[this.status], 'HELLO');
 
     this.message =
       message || http.StatusCodes[this.status] || 'Error';

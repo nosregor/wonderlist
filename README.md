@@ -6,7 +6,7 @@
 
 ## 🧰 Simple TypeScript Starter | 2021
 
-The purpose of this repository is to show a good end-to-end project setup and workflow for writing **Mongoose, Node.js, Express code in TypeScript** complete with middleware, models, testing, routes and types.   
+The purpose of this repository is to show a good end-to-end project setup and workflow for writing **Mongoose, Node.js, Express code in TypeScript** complete with middleware, models, testing, routes and types.
 
 This project comes with a complete REST API to handle Authentication and CRUD features on Users as well as handle Lists and their corresponding Tasks.
 
@@ -18,7 +18,6 @@ This project comes with a complete REST API to handle Authentication and CRUD fe
 - Pre-commit hooks with Husky
 - VS Code debugger scripts
 - Local development with Nodemon
-
 
 ### Scripts
 
@@ -49,8 +48,6 @@ Format your code.
 #### `npm run prettier-watch`
 
 Format your code in watch mode, waiting for file changes.
-
-
 
 #### Ressources
 
@@ -91,11 +88,8 @@ Format your code in watch mode, waiting for file changes.
 #### Advanced Node.js and TypeScript
 
 - https://medium.com/swlh/typescript-with-mongoose-and-node-express-24073d51d2ee
-<<<<<<< HEAD
 
 ### Architecture
 
 - https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf#configs
-=======
 - https://khalilstemmler.com
->>>>>>> 2be4f01d71bbbc7fc1f1cf47cac3e7d18acc88f5
